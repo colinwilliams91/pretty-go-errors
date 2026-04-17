@@ -1,0 +1,45 @@
+{
+  "name": "pretty-go-errors",
+  "displayName": "Pretty Go Errors",
+  "publisher": "colinwilliams91",
+  "description": "Make Go diagnostics easier to read in VS Code hovers",
+  "version": "0.1.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/colinwilliams91/pretty-go-errors",
+    "directory": "apps/vscode-extension"
+  },
+  "homepage": "https://github.com/colinwilliams91/pretty-go-errors",
+  "license": "MIT",
+  "engines": {
+    "vscode": "^1.77.0"
+  },
+  "categories": [
+    "Programming Languages",
+    "Other"
+  ],
+  "keywords": [
+    "go",
+    "gopls",
+    "diagnostics",
+    "hover"
+  ],
+  "activationEvents": [
+    "onLanguage:go"
+  ],
+  "main": "./dist/extension.js",
+  "files": [
+    "dist/**/*",
+    "LICENSE",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "npm run compile",
+    "compile": "node scripts/build.js",
+    "lint": "tsc -p . --noEmit",
+    "package": "npm run compile && vsce package --allow-missing-repository"
+  },
+  "dependencies": {
+    "@pretty-go-errors/vscode-formatter": "*"
+  }
+}
