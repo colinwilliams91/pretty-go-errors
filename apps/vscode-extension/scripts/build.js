@@ -10,6 +10,6 @@ esbuild
     target: "node16",
     external: ["vscode"],
     sourcemap: true,
-    logLevel: "info"
+    logLevel: "info",
   })
   .catch(() => process.exit(1));

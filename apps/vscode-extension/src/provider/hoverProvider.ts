@@ -14,15 +14,18 @@ const hoverProvider: HoverProvider = {
       return null;
     }
 
+    const firstMatch = matches[0];
     return {
-      range: matches[0]?.range,
-      contents: matches.flatMap((item) => item.contents)
+      range: firstMatch.range,
+      contents: matches.flatMap((item) => item.contents),
     };
-  }
+  },
 };
 
 export function registerHoverProvider(context: ExtensionContext) {
   for (const language of SUPPORTED_LANGUAGE_IDS) {
-    context.subscriptions.push(languages.registerHoverProvider({ language }, hoverProvider));
+    context.subscriptions.push(
+      languages.registerHoverProvider({ language }, hoverProvider)
+    );
   }
 }

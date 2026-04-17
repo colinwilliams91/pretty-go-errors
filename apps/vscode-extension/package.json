@@ -10,7 +10,7 @@
     "directory": "apps/vscode-extension"
   },
   "homepage": "https://github.com/colinwilliams91/pretty-go-errors",
-  "license": "MIT",
+  "license": "AGPL-3.0-only",
   "engines": {
     "vscode": "^1.77.0"
   },
@@ -28,6 +28,9 @@
     "onLanguage:go"
   ],
   "main": "./dist/extension.js",
+  "vsce": {
+    "dependencies": false
+  },
   "files": [
     "dist/**/*",
     "LICENSE",

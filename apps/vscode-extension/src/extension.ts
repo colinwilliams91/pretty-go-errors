@@ -1,5 +1,8 @@
 import { ExtensionContext, window } from "vscode";
-import { refreshDiagnosticsForUri, registerOnDidChangeDiagnostics } from "./diagnostics";
+import {
+  refreshDiagnosticsForUri,
+  registerOnDidChangeDiagnostics,
+} from "./diagnostics";
 import { registerHoverProvider } from "./provider/hoverProvider";
 import { SUPPORTED_LANGUAGE_IDS } from "./supportedLanguageIds";
 

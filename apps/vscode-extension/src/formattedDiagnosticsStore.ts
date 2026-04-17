@@ -5,4 +5,7 @@ export interface FormattedDiagnostic {
   contents: MarkdownString[];
 }
 
-export const formattedDiagnosticsStore = new Map<string, FormattedDiagnostic[]>();
+export const formattedDiagnosticsStore = new Map<
+  string,
+  FormattedDiagnostic[]
+>();

@@ -11,9 +11,12 @@ describe("parseGoDiagnostic", () => {
     expect(parsed.title).toBe("Type mismatch");
     expect(parsed.details).toEqual(
       expect.arrayContaining([
-        expect.objectContaining({ label: "Actual type", value: "*bytes.Buffer" }),
+        expect.objectContaining({
+          label: "Actual type",
+          value: "*bytes.Buffer",
+        }),
         expect.objectContaining({ label: "Expected type", value: "io.Reader" }),
-        expect.objectContaining({ label: "Missing method", value: "Read" })
+        expect.objectContaining({ label: "Missing method", value: "Read" }),
       ])
     );
   });
@@ -36,7 +39,7 @@ describe("parseGoDiagnostic", () => {
     expect(parsed.details).toEqual(
       expect.arrayContaining([
         expect.objectContaining({ label: "Have", value: "string, string" }),
-        expect.objectContaining({ label: "Want", value: "string" })
+        expect.objectContaining({ label: "Want", value: "string" }),
       ])
     );
   });

@@ -4,11 +4,11 @@ import {
   languages,
   MarkdownString,
   type Diagnostic,
-  type Uri
+  type Uri,
 } from "vscode";
 import {
   formattedDiagnosticsStore,
-  type FormattedDiagnostic
+  type FormattedDiagnostic,
 } from "./formattedDiagnosticsStore";
 
 const SUPPORTED_DIAGNOSTIC_SOURCES = new Set([
@@ -16,11 +16,12 @@ const SUPPORTED_DIAGNOSTIC_SOURCES = new Set([
   "gopls",
   "go list",
   "go test",
-  "syntax"
+  "syntax",
 ]);
 
 const CACHE_SIZE_MAX = 200;
 const cache = new Map<string, MarkdownString>();
+const cacheOrder: string[] = [];
 
 export function registerOnDidChangeDiagnostics(context: ExtensionContext) {
   context.subscriptions.push(
@@ -49,11 +50,19 @@ export async function refreshDiagnosticsForUri(uri: Uri): Promise<void> {
 }
 
 function isSupportedDiagnostic(diagnostic: Diagnostic): boolean {
-  return !diagnostic.source || SUPPORTED_DIAGNOSTIC_SOURCES.has(diagnostic.source);
+  return (
+    !diagnostic.source || SUPPORTED_DIAGNOSTIC_SOURCES.has(diagnostic.source)
+  );
 }
 
-async function formatDiagnostic(diagnostic: Diagnostic): Promise<FormattedDiagnostic> {
-  const cacheKey = `${diagnostic.source ?? "unknown"}|${String(diagnostic.code ?? "")}|${diagnostic.message}`;
+async function formatDiagnostic(
+  diagnostic: Diagnostic
+): Promise<FormattedDiagnostic> {
+  const cacheKey = JSON.stringify({
+    source: diagnostic.source ?? "unknown",
+    code: normalizeCode(diagnostic.code) ?? "",
+    message: diagnostic.message,
+  });
   let markdown = cache.get(cacheKey);
 
   if (!markdown) {
@@ -61,22 +70,23 @@ async function formatDiagnostic(diagnostic: Diagnostic): Promise<FormattedDiagno
       prettifyDiagnosticForHover({
         message: diagnostic.message,
         source: diagnostic.source,
-        code: normalizeCode(diagnostic.code)
+        code: normalizeCode(diagnostic.code),
       })
     );
     markdown.supportHtml = false;
     if (cache.size >= CACHE_SIZE_MAX) {
-      const oldestKey = cache.keys().next().value;
+      const oldestKey = cacheOrder.shift();
       if (oldestKey) {
         cache.delete(oldestKey);
       }
     }
     cache.set(cacheKey, markdown);
+    cacheOrder.push(cacheKey);
   }
 
   return {
     range: diagnostic.range,
-    contents: [markdown]
+    contents: [markdown],
   };
 }
 

@@ -1,7 +1,7 @@
 import {
   parseGoDiagnostic,
   type ParsedDetail,
-  type ParsedDiagnostic
+  type ParsedDiagnostic,
 } from "@pretty-go-errors/formatter";
 import { escapeMarkdownInlineCode } from "@pretty-go-errors/utils";
 
@@ -11,8 +11,17 @@ export interface HoverDiagnosticLike {
   code?: string | number | { value: string | number };
 }
 
-export function prettifyDiagnosticForHover(diagnostic: HoverDiagnosticLike): string {
+export function prettifyDiagnosticForHover(
+  diagnostic: HoverDiagnosticLike
+): string {
   const parsed = parseGoDiagnostic(diagnostic.message);
+  return renderParsedDiagnosticForHover(parsed, diagnostic);
+}
+
+export function renderParsedDiagnosticForHover(
+  parsed: ParsedDiagnostic,
+  diagnostic: Omit<HoverDiagnosticLike, "message">
+): string {
   const metadata = formatMetadata(diagnostic);
   const sections = parsed.details.map(renderDetail).join("\n\n");
 
@@ -22,13 +31,15 @@ export function prettifyDiagnosticForHover(diagnostic: HoverDiagnosticLike): str
     metadata,
     sections,
     "**Original diagnostic**",
-    codeBlock(parsed.rawMessage, "text")
+    codeBlock(parsed.rawMessage, "text"),
   ]
     .filter(Boolean)
     .join("\n\n");
 }
 
-function formatMetadata(diagnostic: HoverDiagnosticLike): string | undefined {
+function formatMetadata(
+  diagnostic: Omit<HoverDiagnosticLike, "message">
+): string | undefined {
   const items: string[] = [];
   if (diagnostic.source) {
     items.push(`Source: ${escapeMarkdownInlineCode(diagnostic.source)}`);
@@ -51,16 +62,18 @@ function renderDetail(detail: ParsedDetail): string {
     case "text":
       return `- **${detail.label}:** ${detail.value}`;
     case "list":
-      return [`**${detail.label}**`, ...detail.items.map((item) => `- ${item}`)].join("\n");
+      return [
+        `**${detail.label}**`,
+        ...detail.items.map((item) => `- ${item}`),
+      ].join("\n");
     case "code":
-      return [`**${detail.label}**`, codeBlock(detail.value, detail.language ?? "go")].join("\n\n");
+      return [
+        `**${detail.label}**`,
+        codeBlock(detail.value, detail.language ?? "go"),
+      ].join("\n\n");
   }
 }
 
 function codeBlock(value: string, language: string): string {
   return `\`\`\`${language}\n${value}\n\`\`\``;
-}
-
-export function formatParsedDiagnosticForHover(parsed: ParsedDiagnostic): string {
-  return prettifyDiagnosticForHover({ message: parsed.rawMessage });
 }
