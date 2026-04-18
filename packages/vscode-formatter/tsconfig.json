@@ -1,7 +1,4 @@
 {
-  "extends": "../../tsconfig.base.json", // TODO: are all of these tsconfig.json problems due to their nested and duplicate nature?
-  "compilerOptions": {
-    "outDir": "dist"
-  },
+  "extends": "../../tsconfig.base.json",
   "include": ["src/**/*.ts", "test/**/*.ts"]
 }
