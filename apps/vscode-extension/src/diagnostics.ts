@@ -11,8 +11,7 @@ import {
   type FormattedDiagnostic,
 } from "./formattedDiagnosticsStore";
 
-// TODO: this seems legit but is there an API or a source of truth for all the Golang/Go Diagnostic sources?
-const SUPPORTED_DIAGNOSTIC_SOURCES = new Set([
+const SUPPORTED_GO_DIAGNOSTIC_SOURCES = new Set([
   "compiler",
   "gopls",
   "go list",
@@ -52,7 +51,8 @@ export async function refreshDiagnosticsForUri(uri: Uri): Promise<void> {
 
 function isSupportedDiagnostic(diagnostic: Diagnostic): boolean {
   return (
-    !diagnostic.source || SUPPORTED_DIAGNOSTIC_SOURCES.has(diagnostic.source)
+    !diagnostic.source ||
+    SUPPORTED_GO_DIAGNOSTIC_SOURCES.has(diagnostic.source)
   );
 }
 

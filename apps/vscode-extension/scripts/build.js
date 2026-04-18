@@ -7,7 +7,7 @@ esbuild
     outfile: "dist/extension.js",
     platform: "node",
     format: "cjs",
-    target: "node16", // TODO: this should be node 20?
+    target: "node16",
     external: ["vscode"],
     sourcemap: true,
     logLevel: "info",
