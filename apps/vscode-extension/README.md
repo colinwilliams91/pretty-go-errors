@@ -64,4 +64,4 @@ cannot use value (value of type *bytes.Buffer) as io.Reader value in assignment:
 
 Issues and suggestions: https://github.com/colinwilliams91/pretty-go-errors/issues
 
-Support details: [SUPPORT.md](./SUPPORT.md)
+Support details and Development workflow: [SUPPORT.md](./SUPPORT.md)
