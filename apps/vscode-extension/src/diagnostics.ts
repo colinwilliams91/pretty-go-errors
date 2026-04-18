@@ -51,8 +51,7 @@ export async function refreshDiagnosticsForUri(uri: Uri): Promise<void> {
 
 function isSupportedDiagnostic(diagnostic: Diagnostic): boolean {
   return (
-    !diagnostic.source ||
-    SUPPORTED_GO_DIAGNOSTIC_SOURCES.has(diagnostic.source)
+    !diagnostic.source || SUPPORTED_GO_DIAGNOSTIC_SOURCES.has(diagnostic.source)
   );
 }
 
