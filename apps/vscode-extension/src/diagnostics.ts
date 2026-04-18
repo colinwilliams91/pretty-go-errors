@@ -11,6 +11,7 @@ import {
   type FormattedDiagnostic,
 } from "./formattedDiagnosticsStore";
 
+// TODO: this seems legit but is there an API or a source of truth for all the Golang/Go Diagnostic sources?
 const SUPPORTED_DIAGNOSTIC_SOURCES = new Set([
   "compiler",
   "gopls",
