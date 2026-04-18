@@ -3,7 +3,7 @@
   "displayName": "Pretty Go Errors",
   "publisher": "CWDev",
   "description": "Make Go diagnostics easier to read in VS Code hovers",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "repository": {
     "type": "git",
     "url": "https://github.com/colinwilliams91/pretty-go-errors",
@@ -25,13 +25,19 @@
   },
   "categories": [
     "Programming Languages",
-    "Other"
+    "Debuggers",
+    "Visualization"
   ],
   "keywords": [
     "go",
+    "golang",
     "gopls",
     "diagnostics",
-    "hover"
+    "debug",
+    "formatter",
+    "pretty",
+    "errors",
+    "vscode"
   ],
   "activationEvents": [
     "onLanguage:go"
