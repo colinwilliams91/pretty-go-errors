@@ -3,7 +3,7 @@
   "displayName": "Pretty Go Errors",
   "publisher": "CWDev",
   "description": "Make Go diagnostics easier to read in VS Code hovers",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "repository": {
     "type": "git",
     "url": "https://github.com/colinwilliams91/pretty-go-errors",
@@ -59,6 +59,7 @@
     "compile": "node scripts/build.js",
     "vscode:prepublish": "npm run compile",
     "lint": "tsc -p . --noEmit",
+    "prepublish": "//TODO",
     "package": "vsce package --allow-missing-repository"
   },
   "dependencies": {
