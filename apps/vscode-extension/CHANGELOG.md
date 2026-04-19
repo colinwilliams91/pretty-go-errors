@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.5.0
+
+- Fix broken image on marketplace listing
+- Add "ready for publishing" script that runs all checks and builds the extension, then prints
+- Remove broken Go.mod shield since there is no actual Go code in the repo (it was just misleading)
+
 ## 0.4.0
 
 - Establish FOSS onboarding docs (still needs some work)
