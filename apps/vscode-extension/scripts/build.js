@@ -1,5 +1,7 @@
 const path = require("path");
-const { buildWorkspaceBundle } = require("../../../scripts/esbuildWorkspaceBundle");
+const {
+  buildWorkspaceBundle,
+} = require("../../../scripts/esbuildWorkspaceBundle");
 
 const extensionRoot = path.resolve(__dirname, "..");
 
@@ -9,5 +11,4 @@ buildWorkspaceBundle({
   outfile: "dist/extension.js",
   external: ["vscode"],
   sourcemap: true,
-})
-  .catch(() => process.exit(1));
+}).catch(() => process.exit(1));
