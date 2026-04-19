@@ -1,11 +1,13 @@
 # Changelog
 
 ## 0.4.0
+
 - Establish FOSS onboarding docs (still needs some work)
 - Fix workspace symlinks issues in CI pipelines
 - Add 3x GH Issues in lieu of legitimate Roadmap (temp.)
 
 ## 0.3.0
+
 - Update extension metadata like keywords and categories
 - Check in dependency lockfiles for better reproducible builds
 
