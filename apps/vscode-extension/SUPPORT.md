@@ -33,5 +33,5 @@ _Alternative approach:_
 - run `npm run ready` from the root on your feature branch
 - on pass: push to remote and PR to `main`
 - on merge: I will run `npm run package` to create a VSIX package for manual installation or Marketplace publishing
-  - ***this is important since the VSIX are not checked into source control and the package step needs to be run on the merging code to get the correct version number in the VSIX manifest***
+  - **_this is important since the VSIX are not checked into source control and the package step needs to be run on the merging code to get the correct version number in the VSIX manifest_**
   - _this is essentially our release cadence._
