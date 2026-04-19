@@ -5,7 +5,6 @@
 ![GitHub Repo stars](https://img.shields.io/github/stars/colinwilliams91/pretty-go-errors)
 ![GitHub last commit](https://img.shields.io/github/last-commit/colinwilliams91/pretty-go-errors?style=flat)
 ![GitHub License](https://img.shields.io/github/license/colinwilliams91/pretty-go-errors)
-![GitHub go.mod Go version](https://img.shields.io/github/go-mod/go-version/colinwilliams91/pretty-go-errors)
 
 Pretty Go Errors turns dense Go diagnostics into clearer, structured VS Code hovers so you can understand the actual problem faster.
 
