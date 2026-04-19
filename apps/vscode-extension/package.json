@@ -1,0 +1,67 @@
+{
+  "name": "pretty-go-errors",
+  "displayName": "Pretty Go Errors",
+  "publisher": "CWDev",
+  "description": "Make Go diagnostics easier to read in VS Code hovers",
+  "version": "0.4.1",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/colinwilliams91/pretty-go-errors",
+    "directory": "apps/vscode-extension"
+  },
+  "homepage": "https://github.com/colinwilliams91/pretty-go-errors",
+  "bugs": {
+    "url": "https://github.com/colinwilliams91/pretty-go-errors/issues"
+  },
+  "license": "AGPL-3.0-only",
+  "pricing": "Free",
+  "icon": "media/pretty-go-errors.png",
+  "galleryBanner": {
+    "color": "#00ADD8",
+    "theme": "light"
+  },
+  "engines": {
+    "vscode": "^1.77.0"
+  },
+  "categories": [
+    "Programming Languages",
+    "Debuggers",
+    "Visualization"
+  ],
+  "keywords": [
+    "go",
+    "golang",
+    "gopls",
+    "diagnostics",
+    "debug",
+    "formatter",
+    "pretty",
+    "errors",
+    "vscode"
+  ],
+  "activationEvents": [
+    "onLanguage:go"
+  ],
+  "main": "./dist/extension.js",
+  "vsce": {
+    "dependencies": false
+  },
+  "files": [
+    "dist/**/*",
+    "LICENSE",
+    "README.md",
+    "CHANGELOG.md",
+    "SUPPORT.md",
+    "media/pretty-go-errors.png"
+  ],
+  "scripts": {
+    "build": "npm run compile",
+    "compile": "node scripts/build.js",
+    "vscode:prepublish": "npm run compile",
+    "lint": "tsc -p . --noEmit",
+    "package": "vsce package --allow-missing-repository"
+  },
+  "dependencies": {
+    "@pretty-go-errors/vscode-formatter": "*"
+  }
+}

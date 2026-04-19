@@ -1,0 +1,14 @@
+{
+  "name": "@pretty-go-errors/utils",
+  "version": "0.1.0",
+  "private": true,
+  "main": "dist/index.js",
+  "types": "src/index.ts",
+  "files": [
+    "dist/**"
+  ],
+  "scripts": {
+    "build": "node ../../scripts/buildWorkspacePackage.js",
+    "lint": "tsc -p . --noEmit"
+  }
+}

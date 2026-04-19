@@ -12,7 +12,9 @@
 *.test
 
 # Code coverage profiles and other test artifacts
+out/
 *.out
+coverage/
 coverage.*
 *.coverprofile
 profile.cov
@@ -31,4 +33,6 @@ go.work.sum
 # .idea/
 # .vscode/
 node_modules
+dist/
 *.vsix
+.vscode-test/
