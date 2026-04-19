@@ -1,4 +1,4 @@
-[![Pretty Go Errors Logo](./media/pretty-go-errors.png)](https://github.com/colinwilliams91/pretty-go-errors/blob/main/apps/vscode-extension/media/pretty-go-errors.png)
+![Pretty Go Errors Logo](https://raw.githubusercontent.com/colinwilliams91/pretty-go-errors/main/apps/vscode-extension/media/pretty-go-errors.png)
 
 # Pretty Go Errors
 
