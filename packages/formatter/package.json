@@ -10,7 +10,7 @@
   "scripts": {
     "build": "node ../../scripts/buildWorkspacePackage.js",
     "lint": "tsc -p . --noEmit",
-    "test": "vitest run"
+    "test": "vitest run --config ../../vitest.config.js"
   },
   "dependencies": {
     "@pretty-go-errors/utils": "*"
