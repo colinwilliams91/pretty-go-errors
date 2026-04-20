@@ -44,6 +44,32 @@ describe("parseGoDiagnostic", () => {
     );
   });
 
+  it("formats missing field or method diagnostics", () => {
+    const parsed = parseGoDiagnostic(
+      'huh.NewGroup(huh.NewMultiSelect[string]().Options(huh.NewOption("copilot", "copilot"), huh.NewOption("claude", "claude"), huh.NewOption("codex", "codex"), huh.NewOption("cursor", "cursor")).Key("Harnesses").Title("Select one or more AI Harnesses to support").Value(&config.harnessSelections)).Skip undefined (type *huh.Group has no field or method Skip)'
+    );
+
+    expect(parsed.family).toBe("missing-field-or-method");
+    expect(parsed.title).toBe("Missing field or method");
+    expect(parsed.details).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          label: "Expression",
+          value:
+            'huh.NewGroup(huh.NewMultiSelect[string]().Options(huh.NewOption("copilot", "copilot"), huh.NewOption("claude", "claude"), huh.NewOption("codex", "codex"), huh.NewOption("cursor", "cursor")).Key("Harnesses").Title("Select one or more AI Harnesses to support").Value(&config.harnessSelections)).Skip',
+        }),
+        expect.objectContaining({
+          label: "Receiver type",
+          value: "*huh.Group",
+        }),
+        expect.objectContaining({
+          label: "Missing member",
+          value: "Skip",
+        }),
+      ])
+    );
+  });
+
   it("falls back for unmatched diagnostics", () => {
     const parsed = parseGoDiagnostic("made up diagnostic");
     expect(parsed.family).toBe("fallback");
