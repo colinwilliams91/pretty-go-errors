@@ -36,15 +36,20 @@ export interface ParsedDiagnostic {
 const CALL_ARGUMENT_COUNT_PATTERN =
   /^(too many arguments in call to|not enough arguments in call to) ([^\n]+)\n\s*have \(([^\n]*)\)\n\s*want \(([^\n]*)\)$/;
 
+const CONVERSION_ARGUMENT_COUNT_PATTERN =
+  /^(missing argument|too many arguments) in conversion to (.+)$/;
+
 export function parseGoDiagnostic(message: string): ParsedDiagnostic {
   const rawMessage = compactLines(message);
 
   return (
     parseCallArgumentCount(rawMessage) ??
     parseCannotUse(rawMessage) ??
+    parseConversionArgumentCount(rawMessage) ??
     parseCannotConvert(rawMessage) ??
     parseUndefined(rawMessage) ??
     parseUnknownField(rawMessage) ??
+    parseMissingFieldOrMethod(rawMessage) ??
     parseMissingModule(rawMessage) ??
     parsePackageStd(rawMessage) ??
     parseNotAType(rawMessage) ??
@@ -171,6 +176,35 @@ function createCannotUseDiagnostic(
   };
 }
 
+function parseConversionArgumentCount(
+  message: string
+): ParsedDiagnostic | null {
+  const match = message.match(CONVERSION_ARGUMENT_COUNT_PATTERN);
+  if (!match) {
+    return null;
+  }
+
+  const [, kind, targetType] = match;
+  return {
+    family: "conversion-arguments",
+    title:
+      kind === "missing argument"
+        ? "Missing conversion argument"
+        : "Too many conversion arguments",
+    summary:
+      "Go conversions must provide exactly one value to convert to the target type.",
+    rawMessage: message,
+    details: [
+      {
+        label: "Target type",
+        kind: "code",
+        value: targetType,
+        language: "go",
+      },
+    ],
+  };
+}
+
 function parseCannotConvert(message: string): ParsedDiagnostic | null {
   const match = message.match(
     /^cannot convert (.+?) \(value of type (.+?)\) to type (.+)$/
@@ -228,6 +262,44 @@ function parseUnknownField(message: string): ParsedDiagnostic | null {
     details: [
       { label: "Field", kind: "code", value: field, language: "go" },
       { label: "Struct type", kind: "code", value: targetType, language: "go" },
+    ],
+  };
+}
+
+function parseMissingFieldOrMethod(message: string): ParsedDiagnostic | null {
+  const match = message.match(
+    /^(.+) undefined \(type (.+?) has no field or method (.+?)\)$/
+  );
+  if (!match) {
+    return null;
+  }
+
+  const [, expression, targetType, member] = match;
+  return {
+    family: "missing-field-or-method",
+    title: "Missing field or method",
+    summary:
+      "This type does not define the referenced field or method on the selected value.",
+    rawMessage: message,
+    details: [
+      {
+        label: "Expression",
+        kind: "code",
+        value: expression,
+        language: "go",
+      },
+      {
+        label: "Receiver type",
+        kind: "code",
+        value: targetType,
+        language: "go",
+      },
+      {
+        label: "Missing member",
+        kind: "code",
+        value: member,
+        language: "go",
+      },
     ],
   };
 }

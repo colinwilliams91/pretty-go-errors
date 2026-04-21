@@ -23,6 +23,7 @@ export function renderParsedDiagnosticForHover(
   diagnostic: Omit<HoverDiagnosticLike, "message">
 ): string {
   const metadata = formatMetadata(diagnostic);
+  // TODO: conditionally format codeblocks (rendered under "Value" header) to have newlines after each chained command, e.g. "." operator
   const sections = parsed.details.map(renderDetail).join("\n\n");
 
   return [

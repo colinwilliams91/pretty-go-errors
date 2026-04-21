@@ -44,6 +44,48 @@ describe("parseGoDiagnostic", () => {
     );
   });
 
+  it("formats missing field or method diagnostics", () => {
+    const parsed = parseGoDiagnostic(
+      "config.Theme undefined (type *Config has no field or method Theme)"
+    );
+
+    expect(parsed.family).toBe("missing-field-or-method");
+    expect(parsed.title).toBe("Missing field or method");
+    expect(parsed.details).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          label: "Expression",
+          value: "config.Theme",
+        }),
+        expect.objectContaining({
+          label: "Receiver type",
+          value: "*Config",
+        }),
+        expect.objectContaining({
+          label: "Missing member",
+          value: "Theme",
+        }),
+      ])
+    );
+  });
+
+  it("formats missing conversion argument diagnostics", () => {
+    const parsed = parseGoDiagnostic(
+      "missing argument in conversion to CustomType"
+    );
+
+    expect(parsed.family).toBe("conversion-arguments");
+    expect(parsed.title).toBe("Missing conversion argument");
+    expect(parsed.details).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          label: "Target type",
+          value: "CustomType",
+        }),
+      ])
+    );
+  });
+
   it("falls back for unmatched diagnostics", () => {
     const parsed = parseGoDiagnostic("made up diagnostic");
     expect(parsed.family).toBe("fallback");
