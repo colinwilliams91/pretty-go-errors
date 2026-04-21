@@ -36,12 +36,16 @@ export interface ParsedDiagnostic {
 const CALL_ARGUMENT_COUNT_PATTERN =
   /^(too many arguments in call to|not enough arguments in call to) ([^\n]+)\n\s*have \(([^\n]*)\)\n\s*want \(([^\n]*)\)$/;
 
+const CONVERSION_ARGUMENT_COUNT_PATTERN =
+  /^(missing argument|too many arguments) in conversion to (.+)$/;
+
 export function parseGoDiagnostic(message: string): ParsedDiagnostic {
   const rawMessage = compactLines(message);
 
   return (
     parseCallArgumentCount(rawMessage) ??
     parseCannotUse(rawMessage) ??
+    parseConversionArgumentCount(rawMessage) ??
     parseCannotConvert(rawMessage) ??
     parseUndefined(rawMessage) ??
     parseUnknownField(rawMessage) ??
@@ -169,6 +173,35 @@ function createCannotUseDiagnostic(
     summary: "A value is being used where Go expects a different type.",
     rawMessage,
     details,
+  };
+}
+
+function parseConversionArgumentCount(
+  message: string
+): ParsedDiagnostic | null {
+  const match = message.match(CONVERSION_ARGUMENT_COUNT_PATTERN);
+  if (!match) {
+    return null;
+  }
+
+  const [, kind, targetType] = match;
+  return {
+    family: "conversion-arguments",
+    title:
+      kind === "missing argument"
+        ? "Missing conversion argument"
+        : "Too many conversion arguments",
+    summary:
+      "Go conversions must provide exactly one value to convert to the target type.",
+    rawMessage: message,
+    details: [
+      {
+        label: "Target type",
+        kind: "code",
+        value: targetType,
+        language: "go",
+      },
+    ],
   };
 }
 
