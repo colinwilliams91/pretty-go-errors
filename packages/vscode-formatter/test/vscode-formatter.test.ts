@@ -30,16 +30,16 @@ describe("prettifyDiagnosticForHover", () => {
       source: "compiler",
       code: "MissingFieldOrMethod",
       message:
-        'huh.NewGroup(huh.NewMultiSelect[string]().Options(huh.NewOption("copilot", "copilot"), huh.NewOption("claude", "claude"), huh.NewOption("codex", "codex"), huh.NewOption("cursor", "cursor")).Key("Harnesses").Title("Select one or more AI Harnesses to support").Value(&config.harnessSelections)).Skip undefined (type *huh.Group has no field or method Skip)',
+        "config.Theme undefined (type *Config has no field or method Theme)",
     });
 
     expect(markdown).toContain("### Missing field or method");
     expect(markdown).toContain("Source: compiler");
     expect(markdown).toContain("Code: MissingFieldOrMethod");
     expect(markdown).toContain("**Receiver type**");
-    expect(markdown).toContain("```go\n*huh.Group\n```");
+    expect(markdown).toContain("```go\n*Config\n```");
     expect(markdown).toContain("**Missing member**");
-    expect(markdown).toContain("```go\nSkip\n```");
+    expect(markdown).toContain("```go\nTheme\n```");
   });
 
   it("renders missing conversion argument diagnostics", () => {
