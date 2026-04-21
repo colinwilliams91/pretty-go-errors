@@ -3,7 +3,7 @@
   "displayName": "Pretty Go Errors",
   "publisher": "CWDev",
   "description": "Make Go diagnostics easier to read in VS Code hovers",
-  "version": "0.5.2",
+  "version": "0.5.3",
   "repository": {
     "type": "git",
     "url": "https://github.com/colinwilliams91/pretty-go-errors",

@@ -42,6 +42,20 @@ describe("prettifyDiagnosticForHover", () => {
     expect(markdown).toContain("```go\nSkip\n```");
   });
 
+  it("renders missing conversion argument diagnostics", () => {
+    const markdown = prettifyDiagnosticForHover({
+      source: "compiler",
+      code: "WrongArgCount",
+      message: "missing argument in conversion to CustomType",
+    });
+
+    expect(markdown).toContain("### Missing conversion argument");
+    expect(markdown).toContain("Source: compiler");
+    expect(markdown).toContain("Code: WrongArgCount");
+    expect(markdown).toContain("**Target type**");
+    expect(markdown).toContain("```go\nCustomType\n```");
+  });
+
   it("falls back cleanly when a partially similar diagnostic does not match a rule", () => {
     const markdown = prettifyDiagnosticForHover({
       message: "cannot use value with an unexpected diagnostic layout",

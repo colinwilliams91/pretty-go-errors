@@ -70,6 +70,23 @@ describe("parseGoDiagnostic", () => {
     );
   });
 
+  it("formats missing conversion argument diagnostics", () => {
+    const parsed = parseGoDiagnostic(
+      "missing argument in conversion to CustomType"
+    );
+
+    expect(parsed.family).toBe("conversion-arguments");
+    expect(parsed.title).toBe("Missing conversion argument");
+    expect(parsed.details).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          label: "Target type",
+          value: "CustomType",
+        }),
+      ])
+    );
+  });
+
   it("falls back for unmatched diagnostics", () => {
     const parsed = parseGoDiagnostic("made up diagnostic");
     expect(parsed.family).toBe("fallback");
