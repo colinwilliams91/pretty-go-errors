@@ -24,7 +24,7 @@ Sidebar functionality is intentionally deferred for now.
 
 ```bash
 npm install
-npm run format
+npm run format # will auto fix. npm run format:check will check without fixing
 npm run lint
 npm run build
 npm run test
