@@ -86,6 +86,23 @@ describe("parseGoDiagnostic", () => {
     );
   });
 
+  it("formats non-local method receiver diagnostics", () => {
+    const parsed = parseGoDiagnostic(
+      "cannot define new methods on non-local type uint32"
+    );
+
+    expect(parsed.family).toBe("non-local-method-definition");
+    expect(parsed.title).toBe("Invalid method receiver");
+    expect(parsed.details).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          label: "Receiver type",
+          value: "uint32",
+        }),
+      ])
+    );
+  });
+
   it("falls back for unmatched diagnostics", () => {
     const parsed = parseGoDiagnostic("made up diagnostic");
     expect(parsed.family).toBe("fallback");

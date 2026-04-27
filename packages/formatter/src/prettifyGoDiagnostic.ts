@@ -47,6 +47,7 @@ export function parseGoDiagnostic(message: string): ParsedDiagnostic {
     parseCannotUse(rawMessage) ??
     parseConversionArgumentCount(rawMessage) ??
     parseCannotConvert(rawMessage) ??
+    parseNonLocalMethodDefinition(rawMessage) ??
     parseUndefined(rawMessage) ??
     parseUnknownField(rawMessage) ??
     parseMissingFieldOrMethod(rawMessage) ??
@@ -223,6 +224,33 @@ function parseCannotConvert(message: string): ParsedDiagnostic | null {
       { label: "Value", kind: "code", value, language: "go" },
       { label: "Actual type", kind: "code", value: actualType, language: "go" },
       { label: "Target type", kind: "code", value: targetType, language: "go" },
+    ],
+  };
+}
+
+function parseNonLocalMethodDefinition(
+  message: string
+): ParsedDiagnostic | null {
+  const match = message.match(
+    /^cannot define new methods on non-local type (.+)$/
+  );
+  if (!match) {
+    return null;
+  }
+
+  return {
+    family: "non-local-method-definition",
+    title: "Invalid method receiver",
+    summary:
+      "Go only allows new methods on types declared in the current package.",
+    rawMessage: message,
+    details: [
+      {
+        label: "Receiver type",
+        kind: "code",
+        value: match[1],
+        language: "go",
+      },
     ],
   };
 }
