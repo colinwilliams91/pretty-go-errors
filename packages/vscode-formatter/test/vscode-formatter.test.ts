@@ -56,6 +56,20 @@ describe("prettifyDiagnosticForHover", () => {
     expect(markdown).toContain("```go\nCustomType\n```");
   });
 
+  it("renders non-local method receiver diagnostics", () => {
+    const markdown = prettifyDiagnosticForHover({
+      source: "compiler",
+      code: "InvalidRecv",
+      message: "cannot define new methods on non-local type uint32",
+    });
+
+    expect(markdown).toContain("### Invalid method receiver");
+    expect(markdown).toContain("Source: compiler");
+    expect(markdown).toContain("Code: InvalidRecv");
+    expect(markdown).toContain("**Receiver type**");
+    expect(markdown).toContain("```go\nuint32\n```");
+  });
+
   it("falls back cleanly when a partially similar diagnostic does not match a rule", () => {
     const markdown = prettifyDiagnosticForHover({
       message: "cannot use value with an unexpected diagnostic layout",

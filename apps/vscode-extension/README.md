@@ -1,5 +1,3 @@
-![Pretty Go Errors Logo](https://raw.githubusercontent.com/colinwilliams91/pretty-go-errors/main/apps/vscode-extension/media/pretty-go-errors.png)
-
 # Pretty Go Errors
 
 ![GitHub Repo stars](https://img.shields.io/github/stars/colinwilliams91/pretty-go-errors)
