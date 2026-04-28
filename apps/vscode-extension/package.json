@@ -37,7 +37,11 @@
     "formatter",
     "pretty",
     "errors",
-    "vscode"
+    "vscode",
+    "prettify",
+    "typescript",
+    "format",
+    "logs"
   ],
   "activationEvents": [
     "onLanguage:go"
