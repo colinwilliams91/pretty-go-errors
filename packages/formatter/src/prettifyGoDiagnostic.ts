@@ -48,6 +48,7 @@ export function parseGoDiagnostic(message: string): ParsedDiagnostic {
     parseConversionArgumentCount(rawMessage) ??
     parseCannotConvert(rawMessage) ??
     parseNonLocalMethodDefinition(rawMessage) ??
+    parseExpectedOperand(rawMessage) ??
     parseUndefined(rawMessage) ??
     parseUnknownField(rawMessage) ??
     parseMissingFieldOrMethod(rawMessage) ??
@@ -250,6 +251,29 @@ function parseNonLocalMethodDefinition(
         kind: "code",
         value: match[1],
         language: "go",
+      },
+    ],
+  };
+}
+
+function parseExpectedOperand(message: string): ParsedDiagnostic | null {
+  const match = message.match(/^expected operand, found (.+)$/);
+  if (!match) {
+    return null;
+  }
+
+  return {
+    family: "expected-operand",
+    title: "Expected operand",
+    summary:
+      "Go expected an expression here, but found a token that cannot start one.",
+    rawMessage: message,
+    details: [
+      {
+        label: "Found token",
+        kind: "code",
+        value: match[1],
+        language: "text",
       },
     ],
   };
