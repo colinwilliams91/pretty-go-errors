@@ -289,7 +289,8 @@ function parseMissingComma(message: string): ParsedDiagnostic | null {
   return {
     family: "missing-comma",
     title: "Missing comma",
-    summary: "Go expected a comma separator here before the syntax could continue.",
+    summary:
+      "Go expected a comma separator here before the syntax could continue.",
     rawMessage: message,
     details: [
       {
