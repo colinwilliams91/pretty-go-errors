@@ -82,6 +82,19 @@ describe("prettifyDiagnosticForHover", () => {
     expect(markdown).toContain("```text\n'{'\n```");
   });
 
+  it("renders missing comma diagnostics", () => {
+    const markdown = prettifyDiagnosticForHover({
+      source: "syntax",
+      message: "missing ',' in argument list",
+    });
+
+    expect(markdown).toContain("### Missing comma");
+    expect(markdown).toContain("Source: syntax");
+    expect(markdown).toContain("- **Context:** argument list");
+    expect(markdown).toContain("**Expected token**");
+    expect(markdown).toContain("```text\n,\n```");
+  });
+
   it("falls back cleanly when a partially similar diagnostic does not match a rule", () => {
     const markdown = prettifyDiagnosticForHover({
       message: "cannot use value with an unexpected diagnostic layout",
