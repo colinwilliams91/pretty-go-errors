@@ -49,6 +49,7 @@ export function parseGoDiagnostic(message: string): ParsedDiagnostic {
     parseCannotConvert(rawMessage) ??
     parseNonLocalMethodDefinition(rawMessage) ??
     parseExpectedOperand(rawMessage) ??
+    parseMissingComma(rawMessage) ??
     parseUndefined(rawMessage) ??
     parseUnknownField(rawMessage) ??
     parseMissingFieldOrMethod(rawMessage) ??
@@ -273,6 +274,34 @@ function parseExpectedOperand(message: string): ParsedDiagnostic | null {
         label: "Found token",
         kind: "code",
         value: match[1],
+        language: "text",
+      },
+    ],
+  };
+}
+
+function parseMissingComma(message: string): ParsedDiagnostic | null {
+  const match = message.match(/^missing ',' in (.+)$/);
+  if (!match) {
+    return null;
+  }
+
+  return {
+    family: "missing-comma",
+    title: "Missing comma",
+    summary:
+      "Go expected a comma separator here before the syntax could continue.",
+    rawMessage: message,
+    details: [
+      {
+        label: "Context",
+        kind: "text",
+        value: match[1],
+      },
+      {
+        label: "Expected token",
+        kind: "code",
+        value: ",",
         language: "text",
       },
     ],

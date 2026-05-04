@@ -118,6 +118,25 @@ describe("parseGoDiagnostic", () => {
     );
   });
 
+  it("formats missing comma diagnostics", () => {
+    const parsed = parseGoDiagnostic("missing ',' in argument list");
+
+    expect(parsed.family).toBe("missing-comma");
+    expect(parsed.title).toBe("Missing comma");
+    expect(parsed.details).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          label: "Context",
+          value: "argument list",
+        }),
+        expect.objectContaining({
+          label: "Expected token",
+          value: ",",
+        }),
+      ])
+    );
+  });
+
   it("falls back for unmatched diagnostics", () => {
     const parsed = parseGoDiagnostic("made up diagnostic");
     expect(parsed.family).toBe("fallback");
