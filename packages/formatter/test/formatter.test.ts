@@ -103,6 +103,21 @@ describe("parseGoDiagnostic", () => {
     );
   });
 
+  it("formats expected operand diagnostics", () => {
+    const parsed = parseGoDiagnostic("expected operand, found '{'");
+
+    expect(parsed.family).toBe("expected-operand");
+    expect(parsed.title).toBe("Expected operand");
+    expect(parsed.details).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          label: "Found token",
+          value: "'{'",
+        }),
+      ])
+    );
+  });
+
   it("falls back for unmatched diagnostics", () => {
     const parsed = parseGoDiagnostic("made up diagnostic");
     expect(parsed.family).toBe("fallback");

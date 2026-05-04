@@ -70,6 +70,18 @@ describe("prettifyDiagnosticForHover", () => {
     expect(markdown).toContain("```go\nuint32\n```");
   });
 
+  it("renders expected operand diagnostics", () => {
+    const markdown = prettifyDiagnosticForHover({
+      source: "syntax",
+      message: "expected operand, found '{'",
+    });
+
+    expect(markdown).toContain("### Expected operand");
+    expect(markdown).toContain("Source: syntax");
+    expect(markdown).toContain("**Found token**");
+    expect(markdown).toContain("```text\n'{'\n```");
+  });
+
   it("falls back cleanly when a partially similar diagnostic does not match a rule", () => {
     const markdown = prettifyDiagnosticForHover({
       message: "cannot use value with an unexpected diagnostic layout",

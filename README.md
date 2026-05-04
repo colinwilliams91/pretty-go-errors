@@ -31,6 +31,14 @@ npm run test
 npm run package
 ```
 
+_alternatively, you can run these custom scripts:_
+
+```bash
+npm run ready
+npm run bump -- |major|minor|patch|
+npm run package # vsix file will be generated in the root directory and must manually be updated to marketplace
+```
+
 ## Versioning
 
 The initial published target is `0.1.0`. Patch releases should be used for formatter fixes, while minor releases should be used when new diagnostic families or hover capabilities are added.
