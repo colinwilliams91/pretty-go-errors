@@ -95,6 +95,93 @@ describe("prettifyDiagnosticForHover", () => {
     expect(markdown).toContain("```text\n,\n```");
   });
 
+  it("renders mismatched types diagnostics", () => {
+    const markdown = prettifyDiagnosticForHover({
+      source: "compiler",
+      code: "MismatchedTypes",
+      message:
+        'invalid operation: 1 + "a" (mismatched types untyped int and untyped string)',
+    });
+
+    expect(markdown).toContain("### Mismatched types");
+    expect(markdown).toContain("Source: compiler");
+    expect(markdown).toContain("**Left type**");
+    expect(markdown).toContain("```go\nuntyped int\n```");
+    expect(markdown).toContain("**Right type**");
+    expect(markdown).toContain("```go\nuntyped string\n```");
+  });
+
+  it("renders return value count diagnostics", () => {
+    const markdown = prettifyDiagnosticForHover({
+      source: "compiler",
+      code: "WrongResultCount",
+      message: "not enough return values\n\thave (number)\n\twant (int, int)",
+    });
+
+    expect(markdown).toContain("### Not enough return values");
+    expect(markdown).toContain("Source: compiler");
+    expect(markdown).toContain("**Have**");
+    expect(markdown).toContain("```go\nnumber\n```");
+    expect(markdown).toContain("**Want**");
+    expect(markdown).toContain("```go\nint, int\n```");
+  });
+
+  it("renders assignment mismatch diagnostics", () => {
+    const markdown = prettifyDiagnosticForHover({
+      source: "compiler",
+      code: "WrongAssignCount",
+      message: "assignment mismatch: 1 variable but two returns 2 values",
+    });
+
+    expect(markdown).toContain("### Assignment mismatch");
+    expect(markdown).toContain("Source: compiler");
+    expect(markdown).toContain("- **Variables on the left:** 1");
+    expect(markdown).toContain("- **Values on the right:** 2");
+    expect(markdown).toContain("**Returning function**");
+    expect(markdown).toContain("```go\ntwo\n```");
+  });
+
+  it("renders missing return diagnostics", () => {
+    const markdown = prettifyDiagnosticForHover({
+      source: "compiler",
+      code: "MissingReturn",
+      message: "missing return",
+    });
+
+    expect(markdown).toContain("### Missing return");
+    expect(markdown).toContain("Source: compiler");
+    expect(markdown).toContain("**Expected statement**");
+    expect(markdown).toContain("```go\nreturn\n```");
+  });
+
+  it("renders unused import diagnostics", () => {
+    const markdown = prettifyDiagnosticForHover({
+      source: "compiler",
+      code: "UnusedImport",
+      message: '"math/rand" imported as r and not used',
+    });
+
+    expect(markdown).toContain("### Unused import");
+    expect(markdown).toContain("Source: compiler");
+    expect(markdown).toContain("**Package**");
+    expect(markdown).toContain("```go\nmath/rand\n```");
+    expect(markdown).toContain("**Imported as**");
+    expect(markdown).toContain("```go\nr\n```");
+  });
+
+  it("renders unused variable diagnostics", () => {
+    const markdown = prettifyDiagnosticForHover({
+      source: "compiler",
+      code: "UnusedVar",
+      message: "declared and not used: count",
+    });
+
+    expect(markdown).toContain("### Unused variable");
+    expect(markdown).toContain("Source: compiler");
+    expect(markdown).toContain("**Variable**");
+    expect(markdown).toContain("```go\ncount\n```");
+  });
+
   it("falls back cleanly when a partially similar diagnostic does not match a rule", () => {
     const markdown = prettifyDiagnosticForHover({
       message: "cannot use value with an unexpected diagnostic layout",
