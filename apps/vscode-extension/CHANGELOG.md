@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.6.0
+
+- Add hover formatting for more common Go diagnostics: unused variables and imports, mismatched types in operations, assignment mismatches, too many/not enough return values, and missing return
+- Add hover formatting for missing field or method access, conversion argument mismatches, and methods defined on non-local types
+- Add syntax-error hovers for "expected operand" and "missing comma in argument list"
+- Broaden Marketplace keywords and tags to improve install discoverability
+- Document the custom `ready`/`bump`/`package` release scripts and add `.gitattributes` to keep formatting consistent across platforms and CI
+
 ## 0.5.0
 
 - Fix broken image on marketplace listing
