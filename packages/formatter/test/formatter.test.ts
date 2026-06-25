@@ -137,6 +137,128 @@ describe("parseGoDiagnostic", () => {
     );
   });
 
+  it("formats mismatched types diagnostics", () => {
+    const parsed = parseGoDiagnostic(
+      'invalid operation: 1 + "a" (mismatched types untyped int and untyped string)'
+    );
+
+    expect(parsed.family).toBe("mismatched-types");
+    expect(parsed.title).toBe("Mismatched types");
+    expect(parsed.details).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({ label: "Operation", value: '1 + "a"' }),
+        expect.objectContaining({ label: "Left type", value: "untyped int" }),
+        expect.objectContaining({
+          label: "Right type",
+          value: "untyped string",
+        }),
+      ])
+    );
+  });
+
+  it("formats return value count diagnostics", () => {
+    const parsed = parseGoDiagnostic(
+      "too many return values\n\thave (number, number)\n\twant (int)"
+    );
+
+    expect(parsed.family).toBe("return-values");
+    expect(parsed.title).toBe("Too many return values");
+    expect(parsed.details).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({ label: "Have", value: "number, number" }),
+        expect.objectContaining({ label: "Want", value: "int" }),
+      ])
+    );
+  });
+
+  it("formats assignment mismatch diagnostics with a returning function", () => {
+    const parsed = parseGoDiagnostic(
+      "assignment mismatch: 1 variable but two returns 2 values"
+    );
+
+    expect(parsed.family).toBe("assignment-mismatch");
+    expect(parsed.title).toBe("Assignment mismatch");
+    expect(parsed.details).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          label: "Variables on the left",
+          value: "1",
+        }),
+        expect.objectContaining({ label: "Values on the right", value: "2" }),
+        expect.objectContaining({ label: "Returning function", value: "two" }),
+      ])
+    );
+  });
+
+  it("formats assignment mismatch diagnostics without a function", () => {
+    const parsed = parseGoDiagnostic(
+      "assignment mismatch: 2 variables but 1 value"
+    );
+
+    expect(parsed.family).toBe("assignment-mismatch");
+    expect(parsed.details).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          label: "Variables on the left",
+          value: "2",
+        }),
+        expect.objectContaining({ label: "Values on the right", value: "1" }),
+      ])
+    );
+    expect(
+      parsed.details.some((detail) => detail.label === "Returning function")
+    ).toBe(false);
+  });
+
+  it("formats missing return diagnostics", () => {
+    const parsed = parseGoDiagnostic("missing return");
+
+    expect(parsed.family).toBe("missing-return");
+    expect(parsed.title).toBe("Missing return");
+    expect(parsed.details).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          label: "Expected statement",
+          value: "return",
+        }),
+      ])
+    );
+  });
+
+  it("formats unused import diagnostics", () => {
+    const parsed = parseGoDiagnostic('"fmt" imported and not used');
+
+    expect(parsed.family).toBe("unused-import");
+    expect(parsed.title).toBe("Unused import");
+    expect(parsed.details).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({ label: "Package", value: "fmt" }),
+      ])
+    );
+  });
+
+  it("formats aliased unused import diagnostics", () => {
+    const parsed = parseGoDiagnostic('"math/rand" imported as r and not used');
+
+    expect(parsed.family).toBe("unused-import");
+    expect(parsed.details).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({ label: "Package", value: "math/rand" }),
+        expect.objectContaining({ label: "Imported as", value: "r" }),
+      ])
+    );
+  });
+
+  it("formats unused variable diagnostics", () => {
+    const parsed = parseGoDiagnostic("declared and not used: count");
+
+    expect(parsed.family).toBe("unused-variable");
+    expect(parsed.title).toBe("Unused variable");
+    expect(parsed.details[0]).toEqual(
+      expect.objectContaining({ label: "Variable", value: "count" })
+    );
+  });
+
   it("falls back for unmatched diagnostics", () => {
     const parsed = parseGoDiagnostic("made up diagnostic");
     expect(parsed.family).toBe("fallback");

@@ -1,0 +1,9 @@
+# Normalize all text files to LF in the repo and on checkout, regardless of
+# a contributor's core.autocrlf setting. Keeps Prettier (endOfLine "lf") and
+# CI consistent across platforms.
+* text=auto eol=lf
+
+# Binary assets must never be line-ending normalized.
+*.png binary
+*.7z binary
+*.vsix binary

@@ -36,8 +36,24 @@ export interface ParsedDiagnostic {
 const CALL_ARGUMENT_COUNT_PATTERN =
   /^(too many arguments in call to|not enough arguments in call to) ([^\n]+)\n\s*have \(([^\n]*)\)\n\s*want \(([^\n]*)\)$/;
 
+// Matches:
+//  - too many return values
+//    have (A, B)
+//    want (A)
+//  - not enough return values
+//    have (A)
+//    want (A, B)
+const RETURN_VALUE_COUNT_PATTERN =
+  /^(too many return values|not enough return values)\n\s*have \(([^\n]*)\)\n\s*want \(([^\n]*)\)$/;
+
 const CONVERSION_ARGUMENT_COUNT_PATTERN =
   /^(missing argument|too many arguments) in conversion to (.+)$/;
+
+// Matches:
+//  - assignment mismatch: 2 variables but 1 value
+//  - assignment mismatch: 1 variable but two returns 2 values
+const ASSIGNMENT_MISMATCH_PATTERN =
+  /^assignment mismatch: (\d+) variables? but (?:(.+?) returns )?(\d+) values?$/;
 
 export function parseGoDiagnostic(message: string): ParsedDiagnostic {
   const rawMessage = compactLines(message);
@@ -57,6 +73,12 @@ export function parseGoDiagnostic(message: string): ParsedDiagnostic {
     parsePackageStd(rawMessage) ??
     parseNotAType(rawMessage) ??
     parseGenericWithoutInstantiation(rawMessage) ??
+    parseMismatchedTypes(rawMessage) ??
+    parseReturnValueCount(rawMessage) ??
+    parseAssignmentMismatch(rawMessage) ??
+    parseMissingReturn(rawMessage) ??
+    parseUnusedImport(rawMessage) ??
+    parseUnusedVariable(rawMessage) ??
     createFallbackDiagnostic(rawMessage)
   );
 }
@@ -468,6 +490,151 @@ function parseGenericWithoutInstantiation(
     rawMessage: message,
     details: [
       { label: "Generic type", kind: "code", value: match[1], language: "go" },
+    ],
+  };
+}
+
+function parseMismatchedTypes(message: string): ParsedDiagnostic | null {
+  const match = message.match(
+    /^invalid operation: (.+?) \(mismatched types (.+?) and (.+?)\)$/
+  );
+  if (!match) {
+    return null;
+  }
+
+  const [, operation, leftType, rightType] = match;
+  return {
+    family: "mismatched-types",
+    title: "Mismatched types",
+    summary:
+      "The operands of this operation have types that Go will not combine without an explicit conversion.",
+    rawMessage: message,
+    details: [
+      { label: "Operation", kind: "code", value: operation, language: "go" },
+      { label: "Left type", kind: "code", value: leftType, language: "go" },
+      { label: "Right type", kind: "code", value: rightType, language: "go" },
+    ],
+  };
+}
+
+function parseReturnValueCount(message: string): ParsedDiagnostic | null {
+  const match = message.match(RETURN_VALUE_COUNT_PATTERN);
+  if (!match) {
+    return null;
+  }
+
+  const [, kind, have, want] = match;
+  return {
+    family: "return-values",
+    title:
+      kind === "too many return values"
+        ? "Too many return values"
+        : "Not enough return values",
+    summary:
+      "The return statement does not match the result list in the function signature.",
+    rawMessage: message,
+    details: [
+      { label: "Have", kind: "code", value: have, language: "go" },
+      { label: "Want", kind: "code", value: want, language: "go" },
+    ],
+  };
+}
+
+function parseAssignmentMismatch(message: string): ParsedDiagnostic | null {
+  const match = message.match(ASSIGNMENT_MISMATCH_PATTERN);
+  if (!match) {
+    return null;
+  }
+
+  const [, variables, source, values] = match;
+  const details: ParsedDetail[] = [
+    { label: "Variables on the left", kind: "text", value: variables },
+    { label: "Values on the right", kind: "text", value: values },
+  ];
+
+  if (source) {
+    details.push({
+      label: "Returning function",
+      kind: "code",
+      value: source,
+      language: "go",
+    });
+  }
+
+  return {
+    family: "assignment-mismatch",
+    title: "Assignment mismatch",
+    summary:
+      "The number of variables on the left does not match the number of values on the right.",
+    rawMessage: message,
+    details,
+  };
+}
+
+function parseMissingReturn(message: string): ParsedDiagnostic | null {
+  if (message !== "missing return") {
+    return null;
+  }
+
+  return {
+    family: "missing-return",
+    title: "Missing return",
+    summary:
+      "A function that declares result parameters must end in a return or other terminating statement.",
+    rawMessage: message,
+    details: [
+      {
+        label: "Expected statement",
+        kind: "code",
+        value: "return",
+        language: "go",
+      },
+    ],
+  };
+}
+
+function parseUnusedImport(message: string): ParsedDiagnostic | null {
+  const match = message.match(/^"(.+?)" imported(?: as (.+?))? and not used$/);
+  if (!match) {
+    return null;
+  }
+
+  const [, packagePath, alias] = match;
+  const details: ParsedDetail[] = [
+    { label: "Package", kind: "code", value: packagePath, language: "go" },
+  ];
+
+  if (alias) {
+    details.push({
+      label: "Imported as",
+      kind: "code",
+      value: alias,
+      language: "go",
+    });
+  }
+
+  return {
+    family: "unused-import",
+    title: "Unused import",
+    summary: "Go does not allow imported packages to go unused.",
+    rawMessage: message,
+    details,
+  };
+}
+
+function parseUnusedVariable(message: string): ParsedDiagnostic | null {
+  const match = message.match(/^declared and not used: (.+)$/);
+  if (!match) {
+    return null;
+  }
+
+  return {
+    family: "unused-variable",
+    title: "Unused variable",
+    summary: "Go does not allow declared local variables to go unused.",
+    rawMessage: message,
+    details: [
+      { label: "Variable", kind: "code", value: match[1], language: "go" },
     ],
   };
 }
