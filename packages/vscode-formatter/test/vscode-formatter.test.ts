@@ -182,6 +182,23 @@ describe("prettifyDiagnosticForHover", () => {
     expect(markdown).toContain("```go\ncount\n```");
   });
 
+  it("breaks long fluent chains in a Value code block across lines", () => {
+    const markdown = prettifyDiagnosticForHover({
+      source: "compiler",
+      code: "IncompatibleAssign",
+      message:
+        'cannot use db.Where("active").Order("name").Limit(10).Find(&users) (value of type *gorm.DB) as []User value in assignment',
+    });
+
+    expect(markdown).toContain("### Type mismatch");
+    expect(markdown).toContain("**Value**");
+    expect(markdown).toContain(
+      '```go\ndb.Where("active").\n\tOrder("name").\n\tLimit(10).\n\tFind(&users)\n```'
+    );
+    // Original diagnostic stays on one line (rendered as plain text).
+    expect(markdown).toContain("**Original diagnostic**");
+  });
+
   it("falls back cleanly when a partially similar diagnostic does not match a rule", () => {
     const markdown = prettifyDiagnosticForHover({
       message: "cannot use value with an unexpected diagnostic layout",
