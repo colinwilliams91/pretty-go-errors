@@ -10,11 +10,11 @@ If you regularly stop to mentally unpack `gopls` or compiler output, this extens
 
 ### With:
 
-![After](https://raw.githubusercontent.com/CWDev/pretty-go-errors/main/media/pretty-go-errors-demo-01.gif)
+![After](https://raw.githubusercontent.com/colinwilliams91/pretty-go-errors/main/media/pretty-go-errors-demo-01.gif)
 
 ### Without:
 
-![Before](https://raw.githubusercontent.com/CWDev/pretty-go-errors/main/media/no-pretty-demo.gif)
+![Before](https://raw.githubusercontent.com/colinwilliams91/pretty-go-errors/main/media/no-pretty-demo.gif)
 
 ## Why install it
 
