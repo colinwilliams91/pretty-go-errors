@@ -8,6 +8,14 @@ Pretty Go Errors turns dense Go diagnostics into clearer, structured VS Code hov
 
 If you regularly stop to mentally unpack `gopls` or compiler output, this extension shortens that step without hiding the original message.
 
+### With:
+
+![After Pretty Go Errors](./media/pretty-go-errors-demo-01.gif)
+
+### Without:
+
+![Before Pretty Go Errors](./media/no-pretty-demo-01.gif)
+
 ## Why install it
 
 - Pulls useful parts of common Go diagnostics into named fields

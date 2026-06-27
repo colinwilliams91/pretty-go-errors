@@ -56,7 +56,7 @@
     "README.md",
     "CHANGELOG.md",
     "SUPPORT.md",
-    "media/pretty-go-errors.png"
+    "media/*"
   ],
   "scripts": {
     "build": "npm run compile",
