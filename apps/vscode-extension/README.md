@@ -21,7 +21,7 @@ If you regularly stop to mentally unpack `gopls` or compiler output, this extens
 - Pulls useful parts of common Go diagnostics into named fields
 - Keeps the original diagnostic at the bottom of the hover for verification
 - Works automatically when you open Go files with diagnostics
-- Stays lightweight and focused on hover clarity rather than adding a full sidebar workflow
+- Stays lightweight and focused on clarity
 
 Pretty Go Errors was inspired by the value provided from [Pretty TypeScript Errors](https://github.com/yoavbls/pretty-ts-errors). Check them out if you use TypeScript too!
 
@@ -48,16 +48,8 @@ cannot use value (value of type *bytes.Buffer) as io.Reader value in assignment:
 
 ## What it improves today
 
-- Type mismatch diagnostics such as `cannot use ... as ...`
-- Missing identifier diagnostics such as `undefined: ...`
-- Call argument count diagnostics such as `too many arguments in call ...`
+- 21 error diagnostics and counting!
 - Diagnostics coming from `gopls`, `compiler`, `go list`, `go test`, and `syntax`
-
-## Current scope
-
-- Hover formatting for Go diagnostics only
-- Rule-based formatting for common high-friction messages
-- Original raw diagnostic preserved in every formatted hover
 
 ## Usage
 
