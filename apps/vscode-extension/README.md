@@ -14,7 +14,7 @@ If you regularly stop to mentally unpack `gopls` or compiler output, this extens
 
 ### Without:
 
-![Before](https://raw.githubusercontent.com/colinwilliams91/pretty-go-errors/main/media/no-pretty-demo.gif)
+![Before](https://raw.githubusercontent.com/colinwilliams91/pretty-go-errors/main/media/no-pretty-demo-01.gif)
 
 ## Why install it
 
