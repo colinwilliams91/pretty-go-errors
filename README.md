@@ -36,7 +36,7 @@ _alternatively, you can run these custom scripts:_
 ```bash
 npm run ready
 npm run bump -- |major|minor|patch|
-npm run package # vsix file will be generated in the root directory and must manually be updated to marketplace
+npm run package # vsix file will be generated in the apps/vscode-extension directory and must manually be updated to marketplace
 ```
 
 ## Versioning
