@@ -55,8 +55,7 @@
     "LICENSE",
     "README.md",
     "CHANGELOG.md",
-    "SUPPORT.md",
-    "media/*"
+    "SUPPORT.md"
   ],
   "scripts": {
     "build": "npm run compile",
