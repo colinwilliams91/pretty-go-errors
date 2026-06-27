@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.7.0 (Roadmap)
+
+- Document before/after via gifs embedded in vsix README
+
 ## 0.6.0
 
 - Add hover formatting for more common Go diagnostics: unused variables and imports, mismatched types in operations, assignment mismatches, too many/not enough return values, and missing return
