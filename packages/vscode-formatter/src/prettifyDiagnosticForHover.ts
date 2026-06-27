@@ -3,7 +3,10 @@ import {
   type ParsedDetail,
   type ParsedDiagnostic,
 } from "@pretty-go-errors/formatter";
-import { escapeMarkdownInlineCode } from "@pretty-go-errors/utils";
+import {
+  escapeMarkdownInlineCode,
+  formatGoMethodChain,
+} from "@pretty-go-errors/utils";
 
 export interface HoverDiagnosticLike {
   message: string;
@@ -23,7 +26,6 @@ export function renderParsedDiagnosticForHover(
   diagnostic: Omit<HoverDiagnosticLike, "message">
 ): string {
   const metadata = formatMetadata(diagnostic);
-  // TODO: conditionally format codeblocks (rendered under "Value" header) to have newlines after each chained command, e.g. "." operator
   const sections = parsed.details.map(renderDetail).join("\n\n");
 
   return [
@@ -76,5 +78,8 @@ function renderDetail(detail: ParsedDetail): string {
 }
 
 function codeBlock(value: string, language: string): string {
-  return `\`\`\`${language}\n${value}\n\`\`\``;
+  // Only Go code blocks get fluent-chain line breaks; `text` blocks (raw
+  // messages, single tokens) are rendered verbatim so they don't get mangled.
+  const formatted = language === "go" ? formatGoMethodChain(value) : value;
+  return `\`\`\`${language}\n${formatted}\n\`\`\``;
 }
