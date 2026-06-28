@@ -21,6 +21,57 @@ describe("parseGoDiagnostic", () => {
     );
   });
 
+  it("formats cannot use diagnostics with a variable of type phrase", () => {
+    const parsed = parseGoDiagnostic(
+      "cannot use v.Middle.Inner.Value (variable of type int) as string value in assignment"
+    );
+
+    expect(parsed.family).toBe("cannot-use");
+    expect(parsed.title).toBe("Type mismatch");
+    expect(parsed.details).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          label: "Value",
+          value: "v.Middle.Inner.Value",
+        }),
+        expect.objectContaining({ label: "Actual type", value: "int" }),
+        expect.objectContaining({
+          label: "Expected type",
+          value: "string",
+        }),
+        expect.objectContaining({
+          label: "Context",
+          value: "assignment",
+        }),
+      ])
+    );
+  });
+
+  it("formats cannot use diagnostics with a constant of type phrase", () => {
+    const parsed = parseGoDiagnostic(
+      "cannot use untyped constant (constant of type int) as string value in assignment"
+    );
+
+    expect(parsed.family).toBe("cannot-use");
+    expect(parsed.details).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          label: "Value",
+          value: "untyped constant",
+        }),
+        expect.objectContaining({ label: "Actual type", value: "int" }),
+        expect.objectContaining({
+          label: "Expected type",
+          value: "string",
+        }),
+        expect.objectContaining({
+          label: "Context",
+          value: "assignment",
+        }),
+      ])
+    );
+  });
+
   it("formats undefined diagnostics", () => {
     const parsed = parseGoDiagnostic("undefined: fmt.Prinln");
     expect(parsed.family).toBe("undefined");

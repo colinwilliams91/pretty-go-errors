@@ -109,7 +109,7 @@ function parseCallArgumentCount(message: string): ParsedDiagnostic | null {
 
 function parseCannotUse(message: string): ParsedDiagnostic | null {
   const withContext = message.match(
-    /^cannot use (.+?) \(value of type (.+?)\) as (.+?) value in (.+?)(?:: ([\s\S]+))?$/
+    /^cannot use (.+?) \((?:value|variable|constant) of type (.+?)\) as (.+?) value in (.+?)(?:: ([\s\S]+))?$/
   );
   if (withContext) {
     const [, value, actualType, expectedType, context, reason] = withContext;
@@ -124,7 +124,7 @@ function parseCannotUse(message: string): ParsedDiagnostic | null {
   }
 
   const generic = message.match(
-    /^cannot use (.+?) \(value of type (.+?)\) as (.+?)(?:: ([\s\S]+))?$/
+    /^cannot use (.+?) \((?:value|variable|constant) of type (.+?)\) as (.+?)(?:: ([\s\S]+))?$/
   );
   if (!generic) {
     return null;

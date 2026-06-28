@@ -199,6 +199,27 @@ describe("prettifyDiagnosticForHover", () => {
     expect(markdown).toContain("**Original diagnostic**");
   });
 
+  it("renders cannot use diagnostics that use the 'variable of type' phrasing", () => {
+    const markdown = prettifyDiagnosticForHover({
+      source: "compiler",
+      code: "IncompatibleAssign",
+      message:
+        "cannot use v.Middle.Inner.Value (variable of type int) as string value in assignment",
+    });
+
+    expect(markdown).toContain("### Type mismatch");
+    expect(markdown).toContain("Source: compiler");
+    expect(markdown).toContain("**Value**");
+    // Long dotted selector has no fluent `).` boundaries, so it stays on one line.
+    expect(markdown).toContain("```go\nv.Middle.Inner.Value\n```");
+    expect(markdown).toContain("**Actual type**");
+    expect(markdown).toContain("```go\nint\n```");
+    expect(markdown).toContain("**Expected type**");
+    expect(markdown).toContain("```go\nstring\n```");
+    expect(markdown).toContain("**Context:** assignment");
+    expect(markdown).toContain("**Original diagnostic**");
+  });
+
   it("falls back cleanly when a partially similar diagnostic does not match a rule", () => {
     const markdown = prettifyDiagnosticForHover({
       message: "cannot use value with an unexpected diagnostic layout",
