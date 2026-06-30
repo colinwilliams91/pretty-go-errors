@@ -1,4 +1,4 @@
-import { compactLines } from "@pretty-go-errors/utils";
+import { compactLines } from "../../utils/src/index";
 
 export type ParsedDetail =
   | {
@@ -101,8 +101,18 @@ function parseCallArgumentCount(message: string): ParsedDiagnostic | null {
     rawMessage: message,
     details: [
       { label: "Call", kind: "code", value: call, language: "go" },
-      { label: "Have", kind: "code", value: have, language: "go" },
-      { label: "Want", kind: "code", value: want, language: "go" },
+      {
+        label: "Have",
+        kind: "code",
+        value: have || "// no arguments",
+        language: "go",
+      },
+      {
+        label: "Want",
+        kind: "code",
+        value: want || "// no arguments",
+        language: "go",
+      },
     ],
   };
 }
@@ -534,8 +544,18 @@ function parseReturnValueCount(message: string): ParsedDiagnostic | null {
       "The return statement does not match the result list in the function signature.",
     rawMessage: message,
     details: [
-      { label: "Have", kind: "code", value: have, language: "go" },
-      { label: "Want", kind: "code", value: want, language: "go" },
+      {
+        label: "Have",
+        kind: "code",
+        value: have || "// no return values",
+        language: "go",
+      },
+      {
+        label: "Want",
+        kind: "code",
+        value: want || "// no return values",
+        language: "go",
+      },
     ],
   };
 }

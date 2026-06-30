@@ -1,4 +1,7 @@
-import { prettifyDiagnosticForHover } from "@pretty-go-errors/vscode-formatter";
+import {
+  isSupportedGoplsAnalyzerCode,
+  prettifyDiagnosticForHover,
+} from "@pretty-go-errors/vscode-formatter";
 import {
   ExtensionContext,
   languages,
@@ -35,7 +38,9 @@ export function registerOnDidChangeDiagnostics(context: ExtensionContext) {
 
 export async function refreshDiagnosticsForUri(uri: Uri): Promise<void> {
   const diagnostics = languages.getDiagnostics(uri);
-  const supportedDiagnostics = diagnostics.filter(isSupportedDiagnostic);
+  const supportedDiagnostics = dedupeDiagnostics(
+    diagnostics.filter(isSupportedDiagnostic)
+  );
 
   if (supportedDiagnostics.length === 0) {
     formattedDiagnosticsStore.delete(uri.toString());
@@ -49,10 +54,46 @@ export async function refreshDiagnosticsForUri(uri: Uri): Promise<void> {
   formattedDiagnosticsStore.set(uri.toString(), formatted);
 }
 
+// Gopls/VS Code can surface the same diagnostic through more than one
+// diagnostic collection; without deduplication each copy would be formatted
+// and rendered as a separate hover entry, producing visible duplicates.
+function dedupeDiagnostics(diagnostics: Diagnostic[]): Diagnostic[] {
+  const seen = new Set<string>();
+  const unique: Diagnostic[] = [];
+  for (const diagnostic of diagnostics) {
+    const key = diagnosticIdentityKey(diagnostic);
+    if (seen.has(key)) {
+      continue;
+    }
+    seen.add(key);
+    unique.push(diagnostic);
+  }
+  return unique;
+}
+
+function diagnosticIdentityKey(diagnostic: Diagnostic): string {
+  return JSON.stringify({
+    source: diagnostic.source ?? "",
+    code: normalizeCode(diagnostic.code) ?? "",
+    message: diagnostic.message,
+    startLine: diagnostic.range.start.line,
+    startCharacter: diagnostic.range.start.character,
+    endLine: diagnostic.range.end.line,
+    endCharacter: diagnostic.range.end.character,
+  });
+}
+
 function isSupportedDiagnostic(diagnostic: Diagnostic): boolean {
-  return (
-    !diagnostic.source || SUPPORTED_GO_DIAGNOSTIC_SOURCES.has(diagnostic.source)
-  );
+  if (!diagnostic.source) {
+    return true;
+  }
+
+  if (SUPPORTED_GO_DIAGNOSTIC_SOURCES.has(diagnostic.source)) {
+    return true;
+  }
+
+  // Gopls analyzer diagnostics set `source` to the analyzer Name (e.g. "SA1000").
+  return isSupportedGoplsAnalyzerCode(diagnostic.source);
 }
 
 async function formatDiagnostic(

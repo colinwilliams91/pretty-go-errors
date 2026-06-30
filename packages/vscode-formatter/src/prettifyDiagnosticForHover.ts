@@ -2,11 +2,16 @@ import {
   parseGoDiagnostic,
   type ParsedDetail,
   type ParsedDiagnostic,
-} from "@pretty-go-errors/formatter";
+} from "../../formatter/src/prettifyGoDiagnostic";
+import {
+  isSupportedGoplsAnalyzerCode,
+  parseGoplsAnalyzerDiagnostic,
+} from "../../formatter/src/goplsAnalyzers";
 import {
   escapeMarkdownInlineCode,
   formatGoMethodChain,
-} from "@pretty-go-errors/utils";
+  normalizeDiagnosticCode,
+} from "../../utils/src/index";
 
 export interface HoverDiagnosticLike {
   message: string;
@@ -17,8 +22,26 @@ export interface HoverDiagnosticLike {
 export function prettifyDiagnosticForHover(
   diagnostic: HoverDiagnosticLike
 ): string {
-  const parsed = parseGoDiagnostic(diagnostic.message);
+  const parsed = parseDiagnostic(diagnostic);
   return renderParsedDiagnosticForHover(parsed, diagnostic);
+}
+
+// Routes a diagnostic to the right parser. Gopls analyzer diagnostics carry
+// the analyzer Name as `source` (e.g. "SA1000") with `code` set to "default";
+// route those through the analyzer registry. Everything else (compiler,
+// syntax, go list, and gopls passthrough compiler diagnostics) falls through to
+// the existing message-shaped `parseGoDiagnostic` chain.
+function parseDiagnostic(diagnostic: HoverDiagnosticLike): ParsedDiagnostic {
+  if (diagnostic.source && isSupportedGoplsAnalyzerCode(diagnostic.source)) {
+    const analyzer = parseGoplsAnalyzerDiagnostic(
+      diagnostic.source,
+      diagnostic.message
+    );
+    if (analyzer) {
+      return analyzer;
+    }
+  }
+  return parseGoDiagnostic(diagnostic.message);
 }
 
 export function renderParsedDiagnosticForHover(
@@ -48,12 +71,11 @@ function formatMetadata(
     items.push(`Source: ${escapeMarkdownInlineCode(diagnostic.source)}`);
   }
 
-  const code =
-    typeof diagnostic.code === "object" && diagnostic.code !== null
-      ? diagnostic.code.value
-      : diagnostic.code;
+  const code = normalizeDiagnosticCode(diagnostic.code);
 
-  if (code !== undefined) {
+  // Gopls sets `code` to "default" for analyzer diagnostics (which carry the
+  // meaningful identifier in `source`); suppress that noise.
+  if (code !== undefined && code !== "default") {
     items.push(`Code: ${escapeMarkdownInlineCode(String(code))}`);
   }
 
