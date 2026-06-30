@@ -3,6 +3,7 @@ import {
   compactLines,
   escapeMarkdownInlineCode,
   formatGoMethodChain,
+  normalizeDiagnosticCode,
 } from "../src";
 
 describe("formatGoMethodChain", () => {
@@ -62,5 +63,31 @@ describe("compactLines", () => {
 describe("escapeMarkdownInlineCode", () => {
   it("escapes backslashes and backticks", () => {
     expect(escapeMarkdownInlineCode("a`b\\c")).toBe("a\\`b\\\\c");
+  });
+});
+
+describe("normalizeDiagnosticCode", () => {
+  it("passes through a string code", () => {
+    expect(normalizeDiagnosticCode("SA1000")).toBe("SA1000");
+  });
+
+  it("passes through a numeric code", () => {
+    expect(normalizeDiagnosticCode(42)).toBe(42);
+  });
+
+  it("unwraps the { value } object form gopls sends", () => {
+    expect(normalizeDiagnosticCode({ value: "SA1000" })).toBe("SA1000");
+  });
+
+  it("unwraps a numeric value inside the object form", () => {
+    expect(normalizeDiagnosticCode({ value: 7 })).toBe(7);
+  });
+
+  it("returns undefined for undefined", () => {
+    expect(normalizeDiagnosticCode(undefined)).toBeUndefined();
+  });
+
+  it("returns undefined for null", () => {
+    expect(normalizeDiagnosticCode(null)).toBeUndefined();
   });
 });

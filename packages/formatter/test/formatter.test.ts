@@ -222,6 +222,23 @@ describe("parseGoDiagnostic", () => {
     );
   });
 
+  it("formats return value count diagnostics when the function declares no return values", () => {
+    const parsed = parseGoDiagnostic(
+      "too many return values\n\thave (bool)\n\twant ()"
+    );
+
+    expect(parsed.family).toBe("return-values");
+    expect(parsed.details).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({ label: "Have", value: "bool" }),
+        expect.objectContaining({
+          label: "Want",
+          value: "// no return values",
+        }),
+      ])
+    );
+  });
+
   it("formats assignment mismatch diagnostics with a returning function", () => {
     const parsed = parseGoDiagnostic(
       "assignment mismatch: 1 variable but two returns 2 values"

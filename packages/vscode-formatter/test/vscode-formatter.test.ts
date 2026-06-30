@@ -126,6 +126,20 @@ describe("prettifyDiagnosticForHover", () => {
     expect(markdown).toContain("```go\nint, int\n```");
   });
 
+  it("renders return value count diagnostics when the function declares no return values", () => {
+    const markdown = prettifyDiagnosticForHover({
+      source: "compiler",
+      code: "WrongResultCount",
+      message: "too many return values\n\thave (bool)\n\twant ()",
+    });
+
+    expect(markdown).toContain("### Too many return values");
+    expect(markdown).toContain("**Have**");
+    expect(markdown).toContain("```go\nbool\n```");
+    expect(markdown).toContain("**Want**");
+    expect(markdown).toContain("```go\n// no return values\n```");
+  });
+
   it("renders assignment mismatch diagnostics", () => {
     const markdown = prettifyDiagnosticForHover({
       source: "compiler",
@@ -229,5 +243,45 @@ describe("prettifyDiagnosticForHover", () => {
     expect(markdown).toContain(
       "does not match a specialized formatter rule yet"
     );
+  });
+
+  it("renders SA1000 analyzer diagnostics", () => {
+    // Gopls sets `source` to the analyzer Name ("SA1000") and `code` to
+    // "default" for Staticcheck analyzer diagnostics.
+    const markdown = prettifyDiagnosticForHover({
+      source: "SA1000",
+      code: "default",
+      message: "error parsing regexp: missing closing ): `(`",
+    });
+
+    expect(markdown).toContain("### Invalid regular expression");
+    expect(markdown).toContain("Source: SA1000");
+    // The meaningless "default" code is suppressed.
+    expect(markdown).not.toContain("Code:");
+    expect(markdown).toContain("**Pattern**");
+    expect(markdown).toContain("```text\n(\n```");
+    expect(markdown).toContain("- **Reason:** missing closing )");
+    expect(markdown).toContain("- **Hint:** There is an unbalanced `(`");
+    expect(markdown).toContain("**Original diagnostic**");
+  });
+
+  it("falls back cleanly when a gopls analyzer source is unregistered", () => {
+    const markdown = prettifyDiagnosticForHover({
+      source: "SA9999",
+      message: "mystery analyzer message",
+    });
+
+    expect(markdown).toContain("### Go diagnostic");
+    expect(markdown).toContain("mystery analyzer message");
+  });
+
+  it("still routes compiler-style diagnostics through the existing chain when the source is not a registered analyzer", () => {
+    const markdown = prettifyDiagnosticForHover({
+      source: "compiler",
+      message:
+        "cannot use value (value of type int) as string value in assignment",
+    });
+
+    expect(markdown).toContain("### Type mismatch");
   });
 });

@@ -48,8 +48,9 @@ cannot use value (value of type *bytes.Buffer) as io.Reader value in assignment:
 
 ## What it improves today
 
-- 21 error diagnostics and counting!
+- 22 error diagnostics and counting!
 - Diagnostics coming from `gopls`, `compiler`, `go list`, `go test`, and `syntax`
+- Gopls Staticcheck analyzer support begins with SA1000 (Invalid regular expression)
 
 ## Usage
 

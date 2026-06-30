@@ -13,6 +13,20 @@ export function escapeMarkdownInlineCode(input: string): string {
   return input.replace(/\\/g, "\\\\").replace(/`/g, "\\`");
 }
 
+export function normalizeDiagnosticCode(
+  code: string | number | { value: string | number } | undefined
+): string | number | undefined {
+  if (typeof code === "string" || typeof code === "number") {
+    return code;
+  }
+
+  if (code && typeof code === "object" && "value" in code) {
+    return code.value;
+  }
+
+  return undefined;
+}
+
 // Only reflow chains long enough that breaking improves readability; short
 // chains like `a.B().C()` stay inline to avoid noise. Both thresholds are
 // tunable knobs for the "only when it helps" behavior.

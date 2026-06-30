@@ -1,7 +1,10 @@
 # Changelog
 
-## 0.7.0 (Roadmap)
+## 0.7.0
 
+- Add hover formatting for the first Gopls Staticcheck analyzer diagnostic: SA1000 (Invalid regular expression)
+- Add a code-keyed registry and dispatch seam for Gopls analyzer diagnostics, laying the groundwork for the SA/ST/S check families
+- Extract a shared `normalizeDiagnosticCode` helper so diagnostic `code` normalization is consistent across the renderer and the new analyzer seam
 - Document before/after via gifs embedded in vsix README
 
 ## 0.6.0
