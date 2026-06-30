@@ -1,4 +1,4 @@
-import { compactLines } from "@pretty-go-errors/utils";
+import { compactLines } from "../../utils/src/index";
 
 export type ParsedDetail =
   | {

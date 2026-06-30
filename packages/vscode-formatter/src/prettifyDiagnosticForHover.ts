@@ -2,11 +2,11 @@ import {
   parseGoDiagnostic,
   type ParsedDetail,
   type ParsedDiagnostic,
-} from "@pretty-go-errors/formatter";
+} from "../../formatter/src/prettifyGoDiagnostic";
 import {
   escapeMarkdownInlineCode,
   formatGoMethodChain,
-} from "@pretty-go-errors/utils";
+} from "../../utils/src/index";
 
 export interface HoverDiagnosticLike {
   message: string;

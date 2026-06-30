@@ -1,1 +1,5 @@
-export * from "./prettifyGoDiagnostic";
+export {
+  parseGoDiagnostic,
+  type ParsedDetail,
+  type ParsedDiagnostic,
+} from "./prettifyGoDiagnostic";

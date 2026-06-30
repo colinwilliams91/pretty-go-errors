@@ -1,1 +1,5 @@
-export * from "./prettifyDiagnosticForHover";
+export {
+  prettifyDiagnosticForHover,
+  renderParsedDiagnosticForHover,
+  type HoverDiagnosticLike,
+} from "./prettifyDiagnosticForHover";
