@@ -4,15 +4,15 @@
 ![GitHub last commit](https://img.shields.io/github/last-commit/colinwilliams91/pretty-go-errors?style=flat)
 ![GitHub License](https://img.shields.io/github/license/colinwilliams91/pretty-go-errors)
 
-Pretty Go Errors turns dense Go diagnostics into clearer, structured VS Code hovers so you can understand the actual problem faster.
+_Pretty Go Errors turns dense Go diagnostics into clearer, structured VS Code hovers so you can understand the actual problem faster._
 
-If you regularly stop to mentally unpack `gopls` or compiler output, this extension shortens that step without hiding the original message.
+_If you regularly stop to mentally unpack `gopls` or compiler output, this extension shortens that step without hiding the original message._
 
-### With:
+**With:**
 
 ![After](https://raw.githubusercontent.com/colinwilliams91/pretty-go-errors/main/media/pretty-go-errors-demo-01.gif)
 
-### Without:
+**Without:**
 
 ![Before](https://raw.githubusercontent.com/colinwilliams91/pretty-go-errors/main/media/no-pretty-demo-01.gif)
 
