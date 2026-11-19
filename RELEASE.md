@@ -41,18 +41,21 @@ Semver rules (same guidance as the root README's "Versioning" section):
 From the repo root:
 
 ```bash
-npm run bump -- <major|minor|patch>
+npm run bump -- <major|minor|patch>   # or an explicit version: npm run bump -- 0.7.0
 ```
 
-This runs `npm version <level>` in the `apps/vscode-extension` workspace, so it
-updates the version there and — with a clean git tree, per `npm version`
-defaults — also creates a version commit and a `vX.Y.Z` git tag. (No tags
-exist in the repo today because previous bumps were run against dirty trees;
-the first clean-tree bump will produce the first tag. Delete it with
-`git tag -d vX.Y.Z` if you don't want it, or embrace it and push tags going
-forward.) It is exactly equivalent to `SUPPORT.md`'s alternative approach of
-running `npm version <major|minor|patch>` inside `apps/vscode-extension` —
-prefer the root command so you never need to `cd`.
+This runs `npm version <level>` in the `apps/vscode-extension` workspace, which
+updates the version in `apps/vscode-extension/package.json` (and the root
+`package-lock.json`). **It does not create a git commit or tag** — because the
+script versions a workspace, npm skips the git commit/tag step, so commit the
+version bump yourself (usually together with the CHANGELOG update). It is
+equivalent to `SUPPORT.md`'s alternative approach of running
+`npm version <major|minor|patch>` inside `apps/vscode-extension` — prefer the
+root command so you never need to `cd`.
+
+> **Note:** `npm version` bumps are relative — re-running the command bumps
+> again. If you accidentally double-bump, pass an explicit version:
+> `npm run bump -- 0.7.0`.
 
 ## 4. Update the CHANGELOG
 
