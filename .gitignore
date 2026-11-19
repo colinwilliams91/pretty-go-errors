@@ -36,7 +36,3 @@ node_modules
 dist/
 *.vsix
 .vscode-test/
-
-# Manual-testing fixtures (untracked; see fixtures/README.md if present locally,
-# or commit 8866119 for the last tracked copy)
-fixtures/
