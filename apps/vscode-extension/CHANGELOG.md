@@ -1,6 +1,9 @@
 # Changelog
 
-## Unreleased
+## 0.7.0
+
+_The SA1000 items originally drafted for this section shipped with the 0.6.4
+Marketplace release (PR #17); the changes below are new since 0.6.4._
 
 - Add hover formatting for 42 more Gopls Staticcheck analyzer diagnostics (Tier-1 catalog):
   - SA1 standard-library misuse: SA1002, SA1004, SA1006, SA1008, SA1012, SA1015, SA1017, SA1019, SA1029, SA1032
@@ -12,8 +15,12 @@
   - SA9 dubious code: SA9001, SA9002
 - Split the analyzer registry into per-category modules (`goplsAnalyzers/sa1xx.ts` … `sa9xx.ts`) with per-category test files; registry and public API unchanged
 - Ground every analyzer regex in verbatim message templates extracted from the Staticcheck analyzer sources (`docs/staticcheck-message-grounding.md`)
+- Add the maintainer release playbook (`RELEASE.md`) with end-user gopls Staticcheck setup documented in the extension README
 
-## 0.7.0
+## 0.6.4
+
+_The SA1000 seed shipped here (PR #17, "pre-release-v6.4") although it was
+drafted under the 0.7.0 heading:_
 
 - Add hover formatting for the first Gopls Staticcheck analyzer diagnostic: SA1000 (Invalid regular expression)
 - Add a code-keyed registry and dispatch seam for Gopls analyzer diagnostics, laying the groundwork for the SA/ST/S check families
