@@ -11,7 +11,7 @@ Code. Not committed to the repo.
 
    ```jsonc
    {
-     "gopls": { "staticcheck": true }
+     "gopls": { "staticcheck": true },
    }
    ```
 
@@ -23,18 +23,18 @@ Code. Not committed to the repo.
 
 ## New Staticcheck (SA) diagnostics — `staticcheck.go`
 
-| Line | Code | Hover title |
-| --- | --- | --- |
-| `strings.Title(...)` | SA1019 | Using a deprecated function, variable, constant or field |
-| `time.Sleep(100)` | SA1004 | Suspiciously small untyped constant in `time.Sleep` |
-| `time.Parse("2006-01-02", ...)` | SA1002 | Invalid format in `time.Parse` |
-| `NeedsCtx(nil)` | SA1012 | A nil `context.Context` is being passed to a function... |
-| `errors.Is(io.EOF, err)` | SA1032 | Wrong order of arguments to `errors.Is` |
+| Line                                    | Code   | Hover title                                                        |
+| --------------------------------------- | ------ | ------------------------------------------------------------------ |
+| `strings.Title(...)`                    | SA1019 | Using a deprecated function, variable, constant or field           |
+| `time.Sleep(100)`                       | SA1004 | Suspiciously small untyped constant in `time.Sleep`                |
+| `time.Parse("2006-01-02", ...)`         | SA1002 | Invalid format in `time.Parse`                                     |
+| `NeedsCtx(nil)`                         | SA1012 | A nil `context.Context` is being passed to a function...           |
+| `errors.Is(io.EOF, err)`                | SA1032 | Wrong order of arguments to `errors.Is`                            |
 | `strings.Replace(...)` (result ignored) | SA4017 | Discarding the return values of a function without side effects... |
-| `wg.Add(1)` inside `go func` | SA2000 | `(*sync.WaitGroup).Add` called inside the goroutine... |
-| `json:"a" json:"a"` tag | SA5008 | Invalid struct tag |
-| `defer` inside `for range ch` | SA9001 | Defers in range loops may not run when you expect them to |
-| `SpinForever()` recursion | SA5007 | Infinite recursive call |
+| `wg.Add(1)` inside `go func`            | SA2000 | `(*sync.WaitGroup).Add` called inside the goroutine...             |
+| `json:"a" json:"a"` tag                 | SA5008 | Invalid struct tag                                                 |
+| `defer` inside `for range ch`           | SA9001 | Defers in range loops may not run when you expect them to          |
+| `SpinForever()` recursion               | SA5007 | Infinite recursive call                                            |
 
 ## Older diagnostics
 
