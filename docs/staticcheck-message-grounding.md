@@ -6,9 +6,7 @@ module `honnef.co/go/tools`). Every regex in
 `packages/formatter/src/goplsAnalyzers/*` must be anchored to one of these
 templates — never guess message text.
 
-Local copies of the analyzer sources used for grounding live in
-`/tmp/opencode/staticcheck/` (files named `SA<NNNN>.go`). The GitHub raw URL
-pattern is:
+The GitHub raw URL pattern is:
 
 ```
 https://raw.githubusercontent.com/dominikh/go-tools/master/staticcheck/sa<nnnn>/sa<nnnn>.go
