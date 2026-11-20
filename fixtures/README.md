@@ -40,7 +40,11 @@ Code. Not committed to the repo.
 
 - `broken/broken.go` — compiler source: Type mismatch, Unused variable,
   Assignment mismatch, Too many arguments, Undefined.
-- `syntax/syntax.go` — syntax source: Missing comma in argument list.
+- `syntax/syntax.go` — syntax source: Missing comma in argument list, Missing
+  comma in composite literal, Expected operand. (The parser's trailing
+  `expected ';', found 'EOF'` recovery errors intentionally demonstrate the
+  fallback hover.)
+- `staticcheck.go` — the 10 SA-series examples above.
 
 ## Reminder
 
