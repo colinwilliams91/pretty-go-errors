@@ -39,6 +39,10 @@ npm run bump -- |major|minor|patch|
 npm run package # vsix file will be generated in the apps/vscode-extension directory and must manually be updated to marketplace
 ```
 
+_The full release process (gate, bump, changelog, packaging, Marketplace
+publishing, and local manual-testing installs) is documented in
+[RELEASE.md](./RELEASE.md)._
+
 ## Versioning
 
 The initial published target is `0.1.0`. Patch releases should be used for formatter fixes, while minor releases should be used when new diagnostic families or hover capabilities are added.

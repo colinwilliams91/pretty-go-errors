@@ -48,15 +48,28 @@ cannot use value (value of type *bytes.Buffer) as io.Reader value in assignment:
 
 ## What it improves today
 
-- 22 error diagnostics and counting!
+- 64 error diagnostics and counting!
 - Diagnostics coming from `gopls`, `compiler`, `go list`, `go test`, and `syntax`
-- Gopls Staticcheck analyzer support begins with SA1000 (Invalid regular expression)
+- Gopls Staticcheck analyzer support for 43 SA-series checks (SA1, SA2, SA3, SA4, SA5, SA6, and SA9 categories), from SA1000 (Invalid regular expression) to SA9002 (non-octal `os.FileMode`)
 
 ## Usage
 
 1. Install the extension.
 2. Open a Go file that has diagnostics.
 3. Hover the underlined code to see the formatted explanation.
+
+### Staticcheck (SA-series) diagnostics
+
+Recent versions of gopls ship Staticcheck enabled by default, so SA-series
+diagnostics usually appear with no configuration. If you don't see any
+SA-series hovers add this to your
+workspace's `.vscode/settings.json`:
+
+```jsonc
+{
+  "gopls": { "staticcheck": true },
+}
+```
 
 ## Feedback
 

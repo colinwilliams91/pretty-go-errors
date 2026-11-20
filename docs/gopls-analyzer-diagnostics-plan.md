@@ -548,8 +548,9 @@ STEP 4 - TESTS (Red first, then Green)
 STEP 5 - GUARDRAILS (hard)
 - family = lowercased code. No links, no codicons, no colors, no HTML.
   Preserve rawMessage.
-- Use only existing ParsedDetail kinds. New files only in
-  goplsAnalyzers.ts / goplsAnalyzers.test.ts.
+- Use only existing ParsedDetail kinds. New parser files go in
+  `packages/formatter/src/goplsAnalyzers/<category>.ts` (one per SA category,
+  see §15); tests go in per-category test files (see §15).
 - Ground the regex in the cited real message.
 - Use explicit named exports in index.ts (not barrel export *).
 - Route on `source` (analyzer Name). Never assume `source === "gopls"` or
@@ -657,3 +658,51 @@ Adding a new analyzer ecosystem that arrives via a not-yet-admitted source
 - Consolidating the extension's private `normalizeCode` into the shared utils
   helper (optional follow-up).
 - Sidebar/webview functionality (deferred per root README).
+
+---
+
+## 15. Staticcheck Tier-1 catalog (added 2026-11)
+
+Decision record for the Staticcheck expansion (Option A — in-code parsers,
+no runtime docs fetching):
+
+- **Scope**: Tier 1 only (42 new checks; 43 SA checks supported in total
+  including the SA1000 seed); Tier 2 (~45 remaining SA checks) fast-follows
+  in category batches. ST/S/QF stay out of scope (gopls does not run them).
+- **File organization**: parsers are split by SA category into
+  `packages/formatter/src/goplsAnalyzers/{types,index,sa1xx,sa2xx,sa3xx,sa4xx,sa5xx,sa6xx,sa9xx}.ts`.
+  Each category file exports a `sa<nnn>Parsers: Record<string, GoplsAnalyzerParser>`
+  map; `goplsAnalyzers/index.ts` merges them into the registry and keeps the
+  public `parseGoplsAnalyzerDiagnostic` / `isSupportedGoplsAnalyzerCode`
+  exports. Tests are per-category files: `goplsAnalyzers-<cat>.test.ts`
+  (formatter) and `<cat>.test.ts` (vscode-formatter), named e.g.
+  `sa1xx.test.ts`. SA1000 was migrated from the old single
+  `goplsAnalyzers.ts` into `sa1xx.ts` unchanged (behaviorally identical).
+- **Grounding**: verbatim message templates for every Tier-1 check live in
+  `docs/staticcheck-message-grounding.md` (extracted from
+  `dominikh/go-tools` analyzer sources). Every regex must be anchored to a
+  template from that file.
+
+### Tier 1 catalog
+
+| Category | Checks                                                                                                 |
+| -------- | ------------------------------------------------------------------------------------------------------ |
+| sa1xx    | SA1000 (seed), SA1002, SA1004, SA1006, SA1008, SA1012, SA1015, SA1017, SA1019, SA1029, SA1032          |
+| sa2xx    | SA2000, SA2001, SA2002, SA2003                                                                         |
+| sa3xx    | SA3000                                                                                                 |
+| sa4xx    | SA4000, SA4001, SA4003, SA4004, SA4005, SA4006, SA4008, SA4009, SA4010, SA4011, SA4017, SA4023, SA4031 |
+| sa5xx    | SA5000, SA5001, SA5002, SA5003, SA5004, SA5007, SA5008, SA5009, SA5010                                 |
+| sa6xx    | SA6000, SA6002, SA6005                                                                                 |
+| sa9xx    | SA9001, SA9002                                                                                         |
+
+Notes:
+
+- The user-supplied catalog used group labels for several purposes
+  (e.g. SA1000 = "Invalid standard library usage" is the SA1 group label;
+  SA1000's real title is "Invalid regular expression"). The per-check titles
+  on staticcheck.dev are authoritative.
+- SA5011 and SA9000 do not exist in the current catalog and were dropped.
+- Tier 2 (fast-follow batches, same recipe): SA1001, SA1005, SA1007, SA1010,
+  SA1011, SA1013, SA1014, SA1016, SA1018, SA1020-SA1028, SA1030, SA1031,
+  SA3001, SA4012-SA4016, SA4018-SA4022, SA4024-SA4030, SA4032, SA5005,
+  SA5012, SA6001, SA6003, SA6006, SA9003-SA9010.

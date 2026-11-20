@@ -72,6 +72,41 @@ describe("parseGoDiagnostic", () => {
     );
   });
 
+  it("formats cannot use diagnostics with an untyped string constant phrase", () => {
+    const parsed = parseGoDiagnostic(
+      'cannot use "not a number" (untyped string constant) as int value in variable declaration'
+    );
+
+    expect(parsed.family).toBe("cannot-use");
+    expect(parsed.title).toBe("Type mismatch");
+    expect(parsed.details).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({ label: "Value", value: '"not a number"' }),
+        expect.objectContaining({ label: "Actual type", value: "string" }),
+        expect.objectContaining({ label: "Expected type", value: "int" }),
+        expect.objectContaining({
+          label: "Context",
+          value: "variable declaration",
+        }),
+      ])
+    );
+  });
+
+  it("formats cannot use diagnostics with an untyped float constant phrase", () => {
+    const parsed = parseGoDiagnostic(
+      "cannot use 3.5 (untyped float constant) as int value in variable declaration"
+    );
+
+    expect(parsed.family).toBe("cannot-use");
+    expect(parsed.details).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({ label: "Value", value: "3.5" }),
+        expect.objectContaining({ label: "Actual type", value: "float" }),
+        expect.objectContaining({ label: "Expected type", value: "int" }),
+      ])
+    );
+  });
+
   it("formats undefined diagnostics", () => {
     const parsed = parseGoDiagnostic("undefined: fmt.Prinln");
     expect(parsed.family).toBe("undefined");
