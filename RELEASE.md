@@ -96,8 +96,10 @@ Or from the VS Code GUI: **Extensions** panel → `⋯` → **Install from VSIX�
 Reload the window when prompted (`Ctrl/Cmd+Shift+P` → _Developer: Reload
 Window_).
 
-For Gopls Staticcheck analyzer diagnostics (SA-series) to appear at all, the
-workspace under test must have Staticcheck enabled — see the end-user note in
+Recent gopls versions ship Staticcheck enabled by default, so SA-series
+diagnostics usually appear with no configuration. If they don't (or VS Code
+flags a duplicate setting), enable it in the workspace under test — see the
+end-user note in
 [apps/vscode-extension/README.md](./apps/vscode-extension/README.md):
 
 ```jsonc

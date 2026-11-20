@@ -55,16 +55,21 @@ cannot use value (value of type *bytes.Buffer) as io.Reader value in assignment:
 ## Usage
 
 1. Install the extension.
-2. Enable Staticcheck in gopls so the analyzer diagnostics (SA-series) reach the extension. Add this to your workspace's `.vscode/settings.json`:
+2. Open a Go file that has diagnostics.
+3. Hover the underlined code to see the formatted explanation.
 
-   ```jsonc
-   {
-     "gopls": { "staticcheck": true },
-   }
-   ```
+### Staticcheck (SA-series) diagnostics
 
-3. Open a Go file that has diagnostics.
-4. Hover the underlined code to see the formatted explanation.
+Recent versions of gopls ship Staticcheck enabled by default, so SA-series
+diagnostics usually appear with no configuration. If you don't see any
+SA-series hovers (or VS Code flags a duplicate setting), add this to your
+workspace's `.vscode/settings.json`:
+
+```jsonc
+{
+  "gopls": { "staticcheck": true },
+}
+```
 
 ## Feedback
 

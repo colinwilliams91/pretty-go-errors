@@ -133,6 +133,42 @@ function parseCannotUse(message: string): ParsedDiagnostic | null {
     );
   }
 
+  // Untyped constants are reported without an "of type" phrase; the message
+  // names the constant's kind instead, e.g.
+  //   cannot use "not a number" (untyped string constant) as int value in
+  //   variable declaration
+  // The kind doubles as the constant's default type, so surface it verbatim
+  // (string, float, rune, ...) as the actual type.
+  const untypedWithContext = message.match(
+    /^cannot use (.+?) \(untyped (.+?) constant\) as (.+?) value in (.+?)(?:: ([\s\S]+))?$/
+  );
+  if (untypedWithContext) {
+    const [, value, kind, expectedType, context, reason] = untypedWithContext;
+    return createCannotUseDiagnostic(
+      message,
+      value,
+      kind,
+      expectedType,
+      context,
+      reason
+    );
+  }
+
+  const untypedGeneric = message.match(
+    /^cannot use (.+?) \(untyped (.+?) constant\) as (.+?)(?:: ([\s\S]+))?$/
+  );
+  if (untypedGeneric) {
+    const [, value, kind, expectedType, reason] = untypedGeneric;
+    return createCannotUseDiagnostic(
+      message,
+      value,
+      kind,
+      expectedType,
+      undefined,
+      reason
+    );
+  }
+
   const generic = message.match(
     /^cannot use (.+?) \((?:value|variable|constant) of type (.+?)\) as (.+?)(?:: ([\s\S]+))?$/
   );

@@ -7,7 +7,10 @@ Code. Not committed to the repo.
 
 1. Install the locally-packaged extension (`pretty-go-errors-0.7.0.vsix`) and
    reload the window.
-2. Enable Staticcheck in gopls for this workspace (or your global settings):
+2. SA diagnostics: recent gopls versions ship Staticcheck enabled by default,
+   so they usually appear with no configuration. If you don't see any
+   SA-series hovers (or VS Code flags a duplicate setting), enable it in this
+   workspace's `.vscode/settings.json`:
 
    ```jsonc
    {
