@@ -9,7 +9,7 @@ Code. Not committed to the repo.
    reload the window.
 2. SA diagnostics: recent gopls versions ship Staticcheck enabled by default,
    so they usually appear with no configuration. If you don't see any
-   SA-series hovers (or VS Code flags a duplicate setting), enable it in this
+   SA-series hovers, enable it in this
    workspace's `.vscode/settings.json`:
 
    ```jsonc

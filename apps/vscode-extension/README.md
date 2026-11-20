@@ -62,7 +62,7 @@ cannot use value (value of type *bytes.Buffer) as io.Reader value in assignment:
 
 Recent versions of gopls ship Staticcheck enabled by default, so SA-series
 diagnostics usually appear with no configuration. If you don't see any
-SA-series hovers (or VS Code flags a duplicate setting), add this to your
+SA-series hovers add this to your
 workspace's `.vscode/settings.json`:
 
 ```jsonc

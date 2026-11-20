@@ -97,16 +97,9 @@ Reload the window when prompted (`Ctrl/Cmd+Shift+P` → _Developer: Reload
 Window_).
 
 Recent gopls versions ship Staticcheck enabled by default, so SA-series
-diagnostics usually appear with no configuration. If they don't (or VS Code
-flags a duplicate setting), enable it in the workspace under test — see the
+diagnostics usually appear with no configuration. If they don't, enable it in the workspace under test — see the
 end-user note in
 [apps/vscode-extension/README.md](./apps/vscode-extension/README.md):
-
-```jsonc
-{
-  "gopls": { "staticcheck": true },
-}
-```
 
 ## 6b. Publish to the Marketplace
 
