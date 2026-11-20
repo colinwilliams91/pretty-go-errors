@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.7.1
+
+- Update new media (logo icon) gopher with "pretty" red bow
+
 ## 0.7.0
 
 _The SA1000 items originally drafted for this section shipped with the 0.6.4
